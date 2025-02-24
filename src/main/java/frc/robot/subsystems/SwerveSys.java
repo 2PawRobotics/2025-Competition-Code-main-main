@@ -133,7 +133,6 @@ public class SwerveSys extends SubsystemBase {
         setPose(pose);
     }
 
-
     /**
      * Constructs a new SwerveSys.
      * 

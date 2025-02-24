@@ -89,11 +89,9 @@ public class RobotContainer {
         Joystick joystick = new Joystick( ButtonPanelConstants.joystickPort);
 
         lvl4ReefRight.whileTrue(new Lvl4Cmd(liftSys));
-        //lvl3ReefRight.whileTrue(new Lvl3Cmd(liftSys));
-        //lvl2ReefRight.whileTrue(new Lvl2Cmd(liftSys));
-        //lvl1ReefRight.whileTrue(new Lvl1Cmd(liftSys));
-        //lvl4ReefRight.whileFalse(new Lvl0Cmd(liftSys));
-        //lvl3ReefRight.whileFalse(new Lvl0Cmd(liftSys));
+        lvl3ReefRight.whileTrue(new Lvl3Cmd(liftSys));
+        lvl2ReefRight.whileTrue(new Lvl2Cmd(liftSys));
+        lvl1ReefRight.whileTrue(new Lvl1Cmd(liftSys));
     }
 
     private void configOperatorBindings() {
