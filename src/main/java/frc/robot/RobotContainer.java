@@ -46,6 +46,10 @@ public class RobotContainer {
     public final static CommandXboxController operatorController = new CommandXboxController(ControllerConstants.operatorGamepadPort);
     public final static Joystick ButtonPanel = new Joystick(3);
 
+    //initialize Commands
+    Lvl0Cmd lvl0Cmd = new Lvl0Cmd(liftSys);
+    Lvl1Cmd lvl1Cmd = new Lvl1Cmd(liftSys);
+
     //Initialize auto selector.
     SendableChooser<Command> autoSelector = new SendableChooser<Command>();
 
@@ -72,6 +76,8 @@ public class RobotContainer {
         configButtonPanel();
 
         //lightsSys.setDefaultCommand(new LightsDefaultCmd(lightsSys, rollerSys::hasNote));
+
+        lvl1Cmd.addRequirements(liftSys);
     }
 
     private void configButtonPanel() {
