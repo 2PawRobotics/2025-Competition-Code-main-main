@@ -20,6 +20,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.drivetrain.ArcadeDriveCmd;
 import frc.robot.commands.drivetrain.ConveyorCmd;
 import frc.robot.commands.drivetrain.LintakeoutCmd;
+import frc.robot.commands.drivetrain.LintakeoutrunCmd;
 import frc.robot.commands.drivetrain.LockCmd;
 import frc.robot.commands.drivetrain.Lvl0Cmd;
 import frc.robot.commands.drivetrain.Lvl1Cmd;
@@ -27,6 +28,8 @@ import frc.robot.commands.drivetrain.Lvl2Cmd;
 import frc.robot.commands.drivetrain.Lvl3Cmd;
 import frc.robot.commands.drivetrain.Lvl4Cmd;
 import frc.robot.commands.drivetrain.ReleaseCoralCmd;
+import frc.robot.commands.drivetrain.RintakeoutCmd;
+import frc.robot.commands.drivetrain.RintakeoutrunCmd;
 import frc.robot.commands.drivetrain.TurnToHeadingCmd;
 import frc.robot.commands.drivetrain.AimToSpeakerCmd;
 import frc.robot.commands.lights.LightsDefaultCmd;
@@ -68,6 +71,9 @@ public class RobotContainer {
     private final ReleaseCoralCmd releaseCoralCmd;
     private final ConveyorCmd conveyorCmd;
     private final LintakeoutCmd lintakeoutCmd;
+    private final RintakeoutCmd rintakeoutCmd;
+    private final RintakeoutrunCmd rintakeoutrunCmd;
+    private final LintakeoutrunCmd lintakeoutrunCmd;
 
     //Initialize auto selector.
     SendableChooser<Command> autoSelector = new SendableChooser<Command>();
@@ -86,6 +92,9 @@ public class RobotContainer {
         releaseCoralCmd = new ReleaseCoralCmd(endEffectorSys);
         conveyorCmd = new ConveyorCmd(conveyorSys);
         lintakeoutCmd = new LintakeoutCmd(intakeSys);
+        rintakeoutCmd = new RintakeoutCmd(intakeSys);
+        rintakeoutrunCmd = new RintakeoutrunCmd(intakeSys);
+        lintakeoutrunCmd = new LintakeoutrunCmd(intakeSys);
 
         //Add Requirements
         lvl0Cmd.addRequirements(liftSys);
@@ -96,6 +105,9 @@ public class RobotContainer {
         releaseCoralCmd.addRequirements(endEffectorSys);
         conveyorCmd.addRequirements(conveyorSys);
         lintakeoutCmd.addRequirements(intakeSys);
+        lintakeoutrunCmd.addRequirements(intakeSys);
+        rintakeoutCmd.addRequirements(intakeSys);
+        rintakeoutrunCmd.addRequirements(intakeSys);
             
         //Register Commands to PathPlanner
         NamedCommands.registerCommand("lvl4", new Lvl4Cmd(liftSys));
@@ -105,6 +117,10 @@ public class RobotContainer {
         NamedCommands.registerCommand("lvl0", new Lvl0Cmd(liftSys));
         NamedCommands.registerCommand("releaseCoral", new ReleaseCoralCmd(endEffectorSys));
         NamedCommands.registerCommand("conveyor", new ConveyorCmd(conveyorSys));
+        NamedCommands.registerCommand("Lintakeout", new LintakeoutCmd(intakeSys));
+        NamedCommands.registerCommand("Lintakeoutrun", new LintakeoutrunCmd(intakeSys));
+        NamedCommands.registerCommand("Rintakeout", new RintakeoutCmd(intakeSys));
+        NamedCommands.registerCommand("Rintakeoutrun", new RintakeoutrunCmd(intakeSys));
 
         configDriverBindings();
         configOperatorBindings();

@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.ButtonPanelConstants;
 import frc.robot.Constants.CANDevices;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 
 import com.revrobotics.spark.SparkMax;
@@ -22,6 +23,8 @@ public class IntakeSys extends SubsystemBase {
 
     public static SparkMax m_rightIntakeMtr = new SparkMax(31, MotorType.kBrushed);
     public static SparkMax m_leftIntakeMtr = new SparkMax(30, MotorType.kBrushed);
+    public static SparkMax m_leftRollerMtr = new SparkMax(33, MotorType.kBrushed);
+    public static SparkMax m_rightRollerMtr = new SparkMax(34, MotorType.kBrushed);
 
     public static RelativeEncoder m_rightIntakeEnc = m_rightIntakeMtr.getEncoder();
     public static RelativeEncoder m_leftIntakeEnc = m_leftIntakeMtr.getEncoder();
@@ -31,6 +34,26 @@ public class IntakeSys extends SubsystemBase {
     private boolean Lintakein = false;
     private boolean Rintakein = false;
     private boolean intakein = false;
+    private boolean Lintakeoutrun = false;
+    private boolean Rintakeoutrun = false;
+    private boolean Rintakeoutrunbwd = false;
+    private boolean Lintakeoutrunbwd = false;
+
+    public boolean Litnakeoutrun() {
+        return Lintakeoutrun = true;
+    }
+
+    public boolean Litnakeoutrunbwd() {
+        return Lintakeoutrunbwd = true;
+    }
+
+    public boolean Ritnakeoutrunbwd() {
+        return Rintakeoutrunbwd = true;
+    }
+
+    public boolean Rintakeoutrun() {
+        return Rintakeoutrun = true;
+    }
 
     public boolean Rintakeout() {
         return Rintakeout = true;
@@ -61,7 +84,7 @@ public class IntakeSys extends SubsystemBase {
 
     @Override
     public void periodic() {
-
+        if(DriverStation.isTeleopEnabled() == true){
         if(
             operatorController.getRawAxis(0) < -0.95 && operatorController.getRawAxis(1) < 0.95 && operatorController.getRawAxis(1) > -0.95
         ) {
@@ -75,7 +98,7 @@ public class IntakeSys extends SubsystemBase {
         else if(
             operatorController.getRawAxis(1) < -0.95 && operatorController.getRawAxis(0) > 0.95
         ) {
-            System.out.println("Right Intake out and moving fwd");
+            Rintakeoutrun();
         }
         else if(
             operatorController.getRawAxis(1) < 0.95 && operatorController.getRawAxis(1) > -0.95 && operatorController.getRawAxis(0) < 0.95 && operatorController.getRawAxis(0) > -0.95
@@ -85,15 +108,15 @@ public class IntakeSys extends SubsystemBase {
         else if(
             operatorController.getRawAxis(1) > 0.95 && operatorController.getRawAxis(0) < -0.95
         ) {
-            System.out.println("Left Intake Out and Moving Back");
+            Litnakeoutrunbwd();
         }
         else if(operatorController.getRawAxis(1) < -0.95 && operatorController.getRawAxis(0) < -0.95) {
-            System.out.println("Left Intake Out and Moving Fwd");
+            Litnakeoutrun();
         }
         else if(operatorController.getRawAxis(1) > 0.95 && operatorController.getRawAxis(0) > 0.95){
-            System.out.println("Right Intake Out and Moving Bwd");
+            Ritnakeoutrunbwd();
         }
-
+    }
         if(
             Rintakeout == true
         ) {
@@ -117,6 +140,30 @@ public class IntakeSys extends SubsystemBase {
             m_rightIntakeEnc.setPosition(0);
             Lintakein = false;
             System.out.println("L Intake In");
+        }
+        else if (Lintakeoutrun == true) {
+            m_leftIntakeEnc.setPosition(0);
+            m_leftRollerMtr.set(1);
+            Lintakeoutrun = false;
+            System.out.println("Left Intake Out & Running");
+        }
+        else if (Rintakeoutrun == true){
+            m_rightIntakeEnc.setPosition(0);
+            m_rightRollerMtr.set(1);
+            Rintakeoutrun = false;
+            System.out.println("Right Intake Out and Running");
+        }
+        else if (Lintakeoutrunbwd == true){
+            m_leftIntakeEnc.setPosition(0);
+            m_leftRollerMtr.set(-1);
+            Lintakeoutrunbwd = false;
+            System.out.println("Left Intake Out & Running Back");
+        }
+        else if (Rintakeoutrunbwd == true){
+            m_rightIntakeEnc.setPosition(0);
+            m_rightRollerMtr.set(-1);
+            Rintakeoutrunbwd = false;
+            System.out.println("Left Intake Out & Running Back");
         }
         else if (intakein == true){
             m_leftIntakeEnc.setPosition(0);
