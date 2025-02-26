@@ -1,5 +1,7 @@
 package frc.robot;
 
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -7,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.XboxController;
@@ -15,16 +18,22 @@ import frc.robot.Constants.ButtonPanelConstants;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.drivetrain.ArcadeDriveCmd;
+import frc.robot.commands.drivetrain.ConveyorCmd;
+import frc.robot.commands.drivetrain.LintakeoutCmd;
 import frc.robot.commands.drivetrain.LockCmd;
 import frc.robot.commands.drivetrain.Lvl0Cmd;
 import frc.robot.commands.drivetrain.Lvl1Cmd;
 import frc.robot.commands.drivetrain.Lvl2Cmd;
 import frc.robot.commands.drivetrain.Lvl3Cmd;
 import frc.robot.commands.drivetrain.Lvl4Cmd;
+import frc.robot.commands.drivetrain.ReleaseCoralCmd;
 import frc.robot.commands.drivetrain.TurnToHeadingCmd;
 import frc.robot.commands.drivetrain.AimToSpeakerCmd;
 import frc.robot.commands.lights.LightsDefaultCmd;
 import frc.robot.commands.lights.PartyModeCmd;
+import frc.robot.subsystems.ConveyorSys;
+import frc.robot.subsystems.EndEffectorSys;
+import frc.robot.subsystems.IntakeSys;
 import frc.robot.subsystems.LiftSys;
 import frc.robot.subsystems.LightsSys;
 import frc.robot.subsystems.SwerveSys;
@@ -40,11 +49,25 @@ public class RobotContainer {
     //private final ClimberSys climberSys = new ClimberSys();
     private final LiftSys liftSys = new LiftSys();
     private final LightsSys lightsSys = new LightsSys();
+    private final EndEffectorSys endEffectorSys = new EndEffectorSys();
+    private final ConveyorSys conveyorSys = new ConveyorSys();
+    private final IntakeSys intakeSys = new IntakeSys();
 
     //Initialize joysticks.
     public final static CommandXboxController driverController = new CommandXboxController(ControllerConstants.driverGamepadPort);
-    public final static CommandXboxController operatorController = new CommandXboxController(ControllerConstants.operatorGamepadPort);
+    public final static CommandXboxController operatorController = new CommandXboxController(3);
     public final static Joystick ButtonPanel = new Joystick(3);
+    
+
+    //Name Commands
+    private final Lvl0Cmd lvl0Cmd;
+    private final Lvl1Cmd lvl1Cmd;
+    private final Lvl2Cmd lvl2Cmd;
+    private final Lvl3Cmd lvl3Cmd;
+    private final Lvl4Cmd lvl4Cmd;
+    private final ReleaseCoralCmd releaseCoralCmd;
+    private final ConveyorCmd conveyorCmd;
+    private final LintakeoutCmd lintakeoutCmd;
 
     //Initialize auto selector.
     SendableChooser<Command> autoSelector = new SendableChooser<Command>();
@@ -54,19 +77,35 @@ public class RobotContainer {
 
         SmartDashboard.putData("auto selector", autoSelector);
 
-        // Add programs to auto selector.
-        /*autoSelector.setDefaultOption("Do Nothing", null);
-        autoSelector.addOption("Example Auto", new ExampleAuto(swerveSys));
-        autoSelector.addOption("AllianceFour", new AllianceFour(swerveSys, feederSys, rollerSys, pivotSys, spacebarSys));
-        autoSelector.addOption("AmpMidlineTwo", new AmpMidlineTwo(swerveSys, feederSys, rollerSys, pivotSys, spacebarSys));
-        //autoSelector.addOption("AmpMidlineThree", new AmpMidlineThree(swerveSys, feederSys, rollerSys, pivotSys, spacebarSys));
-        // autoSelector.addOption("PiHiThreePiece", new PiHiThreePiece(swerveSys, feederSys, rollerSys, pivotSys));
-        autoSelector.addOption("SmashySmash", new SmashySmash(swerveSys, feederSys, rollerSys, pivotSys, spacebarSys));
-        // autoSelector.addOption("TestFive", new TestFivePiece(swerveSys, feederSys, rollerSys, pivotSys, spacebarSys));
-        autoSelector.addOption("AllianceFive", new AllianceFive(swerveSys, feederSys, rollerSys, pivotSys, spacebarSys));
-        // autoSelector.addOption("SecondPickThree", new SecondPickThree(swerveSys, feederSys, rollerSys, pivotSys, spacebarSys));
-        autoSelector.addOption("SourceMidlineTwo", new SourceMidlineTwo(swerveSys, feederSys, rollerSys, pivotSys, spacebarSys));
-*/
+        //Initalize Commands
+        lvl0Cmd = new Lvl0Cmd(liftSys);
+        lvl1Cmd = new Lvl1Cmd(liftSys);
+        lvl2Cmd = new Lvl2Cmd(liftSys);
+        lvl3Cmd = new Lvl3Cmd(liftSys);
+        lvl4Cmd = new Lvl4Cmd(liftSys);
+        releaseCoralCmd = new ReleaseCoralCmd(endEffectorSys);
+        conveyorCmd = new ConveyorCmd(conveyorSys);
+        lintakeoutCmd = new LintakeoutCmd(intakeSys);
+
+        //Add Requirements
+        lvl0Cmd.addRequirements(liftSys);
+        lvl1Cmd.addRequirements(liftSys);
+        lvl2Cmd.addRequirements(liftSys);
+        lvl3Cmd.addRequirements(liftSys);
+        lvl4Cmd.addRequirements(liftSys);
+        releaseCoralCmd.addRequirements(endEffectorSys);
+        conveyorCmd.addRequirements(conveyorSys);
+        lintakeoutCmd.addRequirements(intakeSys);
+            
+        //Register Commands to PathPlanner
+        NamedCommands.registerCommand("lvl4", new Lvl4Cmd(liftSys));
+        NamedCommands.registerCommand("lvl3", new Lvl3Cmd(liftSys));
+        NamedCommands.registerCommand("lvl2", new Lvl2Cmd(liftSys));
+        NamedCommands.registerCommand("lvl1", new Lvl1Cmd(liftSys));
+        NamedCommands.registerCommand("lvl0", new Lvl0Cmd(liftSys));
+        NamedCommands.registerCommand("releaseCoral", new ReleaseCoralCmd(endEffectorSys));
+        NamedCommands.registerCommand("conveyor", new ConveyorCmd(conveyorSys));
+
         configDriverBindings();
         configOperatorBindings();
         configButtonPanel();
@@ -86,15 +125,20 @@ public class RobotContainer {
         JoystickButton releaseCoral = new JoystickButton(ButtonPanel,  ButtonPanelConstants.releaseCoralPort);
         JoystickButton conveyorControl = new JoystickButton(ButtonPanel,  ButtonPanelConstants.conveyorControlPort);
         JoystickButton conveyorRun = new JoystickButton(ButtonPanel, ButtonPanelConstants.conveyorRunPort);
-        Joystick joystick = new Joystick( ButtonPanelConstants.joystickPort);
+        Joystick joystick = new Joystick(ButtonPanelConstants.joystickPort);
+
 
         lvl4ReefRight.whileTrue(new Lvl4Cmd(liftSys));
-        //lvl3ReefRight.whileTrue(new Lvl3Cmd(liftSys));
-        //lvl2ReefRight.whileTrue(new Lvl2Cmd(liftSys));
-        //lvl1ReefRight.whileTrue(new Lvl1Cmd(liftSys));
-        //lvl4ReefRight.whileFalse(new Lvl0Cmd(liftSys));
-        //lvl3ReefRight.whileFalse(new Lvl0Cmd(liftSys));
+        lvl3ReefRight.whileTrue(new Lvl3Cmd(liftSys));
+        lvl2ReefRight.whileTrue(new Lvl2Cmd(liftSys));
+        lvl1ReefRight.whileTrue(new Lvl1Cmd(liftSys));
+        releaseCoral.toggleOnTrue(new ReleaseCoralCmd(endEffectorSys));
+        conveyorRun.whileTrue(new ConveyorCmd(conveyorSys));
+        
+        
     }
+
+
 
     private void configOperatorBindings() {
         // rollerSys.setDefaultCommand(new RollersManualCmd(

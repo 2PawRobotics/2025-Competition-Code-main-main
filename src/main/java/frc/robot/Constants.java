@@ -35,6 +35,8 @@ public class Constants {
         public static final int frontLeftSteerMtrId = 3;
         public static final int frontLeftDriveMtrId = 4;
 
+        public static final int m_conveyorMtrId = 32;
+
         public static final int frontRightCanCoderId = 10;
         public static final int frontRightSteerMtrId = 5;
         public static final int frontRightDriveMtrId = 6;

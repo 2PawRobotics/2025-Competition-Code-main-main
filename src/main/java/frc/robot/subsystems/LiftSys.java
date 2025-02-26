@@ -67,92 +67,56 @@ public class LiftSys extends SubsystemBase {
 
     @Override
     public void periodic() {
-       // System.out.println("periodicisrunning");
+
         if(
-            RobotContainer.ButtonPanel.getRawButtonPressed(ButtonPanelConstants.lvl4ReefRightPort)
-            ) {
-            lvl4();
+            islvl4Called == true
+        ){
+            m_leftliftEnc.setPosition(400);
+            m_rightliftEnc.setPosition(400);
+            islvl4Called = false;
+            islvl0Called = true;
+            System.out.println("At level 4");
         }
-        else if(
-            RobotContainer.ButtonPanel.getRawButton(ButtonPanelConstants.lvl3ReefRightPort)
-            ) {
-            lvl3();
+        else if (
+            islvl3Called == true
+        ){
+            m_leftliftEnc.setPosition(300);
+            m_rightliftEnc.setPosition(300);
+            islvl3Called = false;
+            islvl0Called = true;
+            System.out.println("At level 3");
         }
-        else if(
-            RobotContainer.ButtonPanel.getRawButtonPressed(ButtonPanelConstants.lvl2ReefRightPort)
-            ) {
-            lvl2();
-            }
-        else if(
-            RobotContainer.ButtonPanel.getRawButtonPressed(ButtonPanelConstants.lvl1ReefRightPort)
-            ) {
-            lvl1();
-            }
-        else{
-            lvl0();
+        else if (
+            islvl2Called == true
+        ) {
+            m_leftliftEnc.setPosition(200);
+            m_rightliftEnc.setPosition(200);
+            System.out.println("At level 2");
+            islvl2Called = false;
+            islvl0Called = true;
         }
+        else if (
+            islvl1Called == true
+        ) {
+            m_leftliftEnc.setPosition(100);
+            m_rightliftEnc.setPosition(100);
+            System.out.println("At level 1");
+            islvl1Called = false;
+            islvl0Called = true;
+        }
+        else if (
+            islvl0Called == true
+        ) {
+            m_leftliftEnc.setPosition(0);
+            m_rightliftEnc.setPosition(0);
+            System.out.println("At level 0");
+        }
+ 
     } 
     public LiftSys() {
 
         m_leftliftEnc.setPosition(0);
         m_rightliftEnc.setPosition(0);
 
-        if(
-            islvl4Called = true
-        ){
-            m_leftliftEnc.setPosition(400);
-            m_rightliftEnc.setPosition(400);
-            System.out.println("At level 4");
-        }
-        else if (
-            islvl3Called = true
-        ){
-            m_leftliftEnc.setPosition(300);
-            m_rightliftEnc.setPosition(300);
-            System.out.println("At level 3");
-        }
-        else if (
-            islvl2Called = true
-        ) {
-            m_leftliftEnc.setPosition(200);
-            m_rightliftEnc.setPosition(200);
-            System.out.println("At level 2");
-        }
-        else if (
-            islvl1Called = true
-        ) {
-            m_leftliftEnc.setPosition(100);
-            m_rightliftEnc.setPosition(100);
-            System.out.println("At level 1");
-        }
-        else{
-            m_leftliftEnc.setPosition(0);
-            m_rightliftEnc.setPosition(0);
-            System.out.println("At level 0");
-        }
-
-        if(
-            RobotContainer.ButtonPanel.getRawButton(ButtonPanelConstants.lvl4ReefRightPort)
-            ) {
-            lvl4();
-        }
-        else if(
-            RobotContainer.ButtonPanel.getRawButton(ButtonPanelConstants.lvl3ReefRightPort)
-            ) {
-            lvl3();
-        }
-        else if(
-            RobotContainer.ButtonPanel.getRawButtonPressed(ButtonPanelConstants.lvl2ReefRightPort)
-            ) {
-            lvl2();
-            }
-        else if(
-            RobotContainer.ButtonPanel.getRawButtonPressed(ButtonPanelConstants.lvl1ReefRightPort)
-            ) {
-            lvl1();
-            }
-        else{
-            lvl0();
-        }
     }
 }
