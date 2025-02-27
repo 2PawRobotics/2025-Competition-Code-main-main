@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Rintakeout"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Example Path"

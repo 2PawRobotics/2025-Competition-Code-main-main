@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkMax;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.RelativeEncoder;
@@ -67,6 +68,7 @@ public class LiftSys extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if (DriverStation.isEnabled() == true) {
 
         if(
             islvl4Called == true
@@ -111,8 +113,9 @@ public class LiftSys extends SubsystemBase {
             m_rightliftEnc.setPosition(0);
             System.out.println("At level 0");
         }
- 
+    }
     } 
+
     public LiftSys() {
 
         m_leftliftEnc.setPosition(0);
