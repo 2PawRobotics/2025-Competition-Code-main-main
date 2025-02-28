@@ -23,8 +23,10 @@ public class IntakeSys extends SubsystemBase {
 
     public static SparkMax m_rightIntakeMtr = new SparkMax(31, MotorType.kBrushed);
     public static SparkMax m_leftIntakeMtr = new SparkMax(30, MotorType.kBrushed);
-    public static SparkMax m_leftRollerMtr = new SparkMax(33, MotorType.kBrushed);
-    public static SparkMax m_rightRollerMtr = new SparkMax(34, MotorType.kBrushed);
+    public static SparkMax m_bottomRightRollerMtr = new SparkMax(34, MotorType.kBrushed);
+    public static SparkMax m_topRightRollerMtr = new SparkMax(35, MotorType.kBrushed);
+    public static SparkMax m_topLeftRollerMtr = new SparkMax(36, MotorType.kBrushed);
+    public static SparkMax m_bottomLeftRollerMtr = new SparkMax(37, MotorType.kBrushed);
 
     public static RelativeEncoder m_rightIntakeEnc = m_rightIntakeMtr.getEncoder();
     public static RelativeEncoder m_leftIntakeEnc = m_leftIntakeMtr.getEncoder();
@@ -143,31 +145,39 @@ public class IntakeSys extends SubsystemBase {
         }
         else if (Lintakeoutrun == true) {
             m_leftIntakeEnc.setPosition(0);
-            m_leftRollerMtr.set(1);
+            m_bottomLeftRollerMtr.set(1);
+            m_topLeftRollerMtr.set(-1);
             Lintakeoutrun = false;
             System.out.println("Left Intake Out & Running");
         }
         else if (Rintakeoutrun == true){
             m_rightIntakeEnc.setPosition(0);
-            m_rightRollerMtr.set(1);
+            m_bottomRightRollerMtr.set(1);
+            m_topRightRollerMtr.set(-1);
             Rintakeoutrun = false;
             System.out.println("Right Intake Out and Running");
         }
         else if (Lintakeoutrunbwd == true){
             m_leftIntakeEnc.setPosition(0);
-            m_leftRollerMtr.set(-1);
+            m_bottomLeftRollerMtr.set(-1);
+            m_topLeftRollerMtr.set(1);
             Lintakeoutrunbwd = false;
             System.out.println("Left Intake Out & Running Back");
         }
         else if (Rintakeoutrunbwd == true){
             m_rightIntakeEnc.setPosition(0);
-            m_rightRollerMtr.set(-1);
+            m_bottomRightRollerMtr.set(-1);
+            m_topRightRollerMtr.set(1);
             Rintakeoutrunbwd = false;
             System.out.println("Left Intake Out & Running Back");
         }
         else if (intakein == true){
             m_leftIntakeEnc.setPosition(0);
             m_rightIntakeEnc.setPosition(0);
+            m_bottomLeftRollerMtr.set(0);
+            m_topLeftRollerMtr.set(0);
+            m_topRightRollerMtr.set(0);
+            m_bottomRightRollerMtr.set(0);
             intakein = false;
             System.out.println("intakes in");
         }

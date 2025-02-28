@@ -19,6 +19,7 @@ import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.drivetrain.ArcadeDriveCmd;
 import frc.robot.commands.drivetrain.ConveyorCmd;
+import frc.robot.commands.drivetrain.LintakeinCmd;
 import frc.robot.commands.drivetrain.LintakeoutCmd;
 import frc.robot.commands.drivetrain.LintakeoutrunCmd;
 import frc.robot.commands.drivetrain.LockCmd;
@@ -28,6 +29,7 @@ import frc.robot.commands.drivetrain.Lvl2Cmd;
 import frc.robot.commands.drivetrain.Lvl3Cmd;
 import frc.robot.commands.drivetrain.Lvl4Cmd;
 import frc.robot.commands.drivetrain.ReleaseCoralCmd;
+import frc.robot.commands.drivetrain.RintakeinCmd;
 import frc.robot.commands.drivetrain.RintakeoutCmd;
 import frc.robot.commands.drivetrain.RintakeoutrunCmd;
 import frc.robot.commands.drivetrain.TurnToHeadingCmd;
@@ -46,10 +48,6 @@ public class RobotContainer {
     
     // Initialize subsystems.
     private final SwerveSys swerveSys = new SwerveSys();
-    //private final PivotSys pivotSys = new PivotSys();
-    //private final RollersSys rollerSys = new RollersSys();
-    //private final FeederSys feederSys = new FeederSys();
-    //private final ClimberSys climberSys = new ClimberSys();
     private final LiftSys liftSys = new LiftSys();
     private final LightsSys lightsSys = new LightsSys();
     private final EndEffectorSys endEffectorSys = new EndEffectorSys();
@@ -121,6 +119,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("Lintakeoutrun", new LintakeoutrunCmd(intakeSys));
         NamedCommands.registerCommand("Rintakeout", new RintakeoutCmd(intakeSys));
         NamedCommands.registerCommand("Rintakeoutrun", new RintakeoutrunCmd(intakeSys));
+        NamedCommands.registerCommand("Rintakein", new RintakeinCmd(intakeSys));
+        NamedCommands.registerCommand("Lintakein", new LintakeinCmd(intakeSys));
 
         configDriverBindings();
         configOperatorBindings();
