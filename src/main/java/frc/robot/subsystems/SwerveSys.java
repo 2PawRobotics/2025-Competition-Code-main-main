@@ -110,12 +110,6 @@ public class SwerveSys extends SubsystemBase {
     // Takes in kinematics and robot angle for parameters
 
     private final SwerveDrivePoseEstimator poseEstimator = 
-        // new SwerveDrivePoseEstimator(
-        //     DriveConstants.kinematics,
-        //     imu.getRotation2d(),
-        //     getModulePositions(),
-        //     new Pose2d()
-        // );
         new SwerveDrivePoseEstimator(
             DriveConstants.kinematics,
             imu.getRotation2d(),

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.33452868852459,
-        "y": 5.133862704918033
+        "x": 3.9199795081967217,
+        "y": 5.313678278688524
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.0468237704918035,
-        "y": 5.973002049180327
+        "x": 2.805122950819672,
+        "y": 6.056915983606557
       },
       "isLocked": false,
       "linkedName": "1Pathend"
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": -59.99999999999999
   },
   "useDefaultConstraints": true
 }

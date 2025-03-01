@@ -2,34 +2,35 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants.ButtonPanelConstants;
 import frc.robot.Constants.CANDevices;
-import edu.wpi.first.math.controller.PIDController;
+import frc.robot.Constants.ControllerConstants;
+import frc.robot.Constants.PivotConstants;
+import frc.robot.Constants.RollerConstants;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Joystick;
 
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SmartMotionConfig;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkBase.ControlType;
-import com.revrobotics.spark.SparkClosedLoopController;
 
 public class IntakeSys extends SubsystemBase {
-    private SparkMax motor;
-    private RelativeEncoder encoder;
-    private PIDController intakeController;
-    public final static CommandXboxController operatorController = new CommandXboxController(3);
+    public final static CommandXboxController operatorController = new CommandXboxController(ControllerConstants.operatorGamepadPort);
 
-    public static SparkMax m_rightIntakeMtr = new SparkMax(31, MotorType.kBrushed);
-    public static SparkMax m_leftIntakeMtr = new SparkMax(30, MotorType.kBrushed);
-    public static SparkMax m_bottomRightRollerMtr = new SparkMax(34, MotorType.kBrushed);
-    public static SparkMax m_topRightRollerMtr = new SparkMax(35, MotorType.kBrushed);
-    public static SparkMax m_topLeftRollerMtr = new SparkMax(36, MotorType.kBrushed);
-    public static SparkMax m_bottomLeftRollerMtr = new SparkMax(37, MotorType.kBrushed);
+    public static SparkMax m_rightIntakeMtr = new SparkMax(CANDevices.m_rightIntakeMtrId, MotorType.kBrushed);
+    public static SparkMax m_leftIntakeMtr = new SparkMax(CANDevices.m_leftIntakeMtrId, MotorType.kBrushed);
+    public static SparkMax m_bottomRightRollerMtr = new SparkMax(CANDevices.m_bottomRightRollerMtrId, MotorType.kBrushed);
+    public static SparkMax m_topRightRollerMtr = new SparkMax(CANDevices.m_topRightRollerMtrId, MotorType.kBrushed);
+    public static SparkMax m_topLeftRollerMtr = new SparkMax(CANDevices.m_topLeftRollerMtrId, MotorType.kBrushed);
+    public static SparkMax m_bottomLeftRollerMtr = new SparkMax(CANDevices.m_bottomLeftRollerMtrId, MotorType.kBrushed);
 
     public static RelativeEncoder m_rightIntakeEnc = m_rightIntakeMtr.getEncoder();
     public static RelativeEncoder m_leftIntakeEnc = m_leftIntakeMtr.getEncoder();
+
+    SparkMaxConfig intakeConfig = new SparkMaxConfig();
+    SparkMaxConfig rollerConfig = new SparkMaxConfig();
 
     private boolean Rintakeout = false;
     private boolean Lintakeout = false;
@@ -79,9 +80,27 @@ public class IntakeSys extends SubsystemBase {
 
     public IntakeSys() {
 
+        intakeConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(
+        PivotConstants.stallLimitAmps, 
+        PivotConstants.freeLimitAmps, 
+        PivotConstants.maxRPM);
+
+        m_leftIntakeMtr.configure(intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        m_rightIntakeMtr.configure(intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+        rollerConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(
+        RollerConstants.stallLimitAmps, 
+        RollerConstants.freeLimitAmps, 
+        RollerConstants.maxRPM);
+
+        m_topLeftRollerMtr.configure(rollerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        m_topRightRollerMtr.configure(rollerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        m_bottomLeftRollerMtr.configure(rollerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        m_bottomRightRollerMtr.configure(rollerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        
         m_rightIntakeEnc.setPosition(0);
         m_leftIntakeEnc.setPosition(0);
-        
+
     }
 
     @Override
@@ -102,11 +121,7 @@ public class IntakeSys extends SubsystemBase {
         ) {
             Rintakeoutrun();
         }
-        else if(
-            operatorController.getRawAxis(1) < 0.95 && operatorController.getRawAxis(1) > -0.95 && operatorController.getRawAxis(0) < 0.95 && operatorController.getRawAxis(0) > -0.95
-        ) {
-            intakein = true;
-        }
+
         else if(
             operatorController.getRawAxis(1) > 0.95 && operatorController.getRawAxis(0) < -0.95
         ) {
@@ -118,18 +133,23 @@ public class IntakeSys extends SubsystemBase {
         else if(operatorController.getRawAxis(1) > 0.95 && operatorController.getRawAxis(0) > 0.95){
             Ritnakeoutrunbwd();
         }
+        else if(
+            operatorController.getRawAxis(1) < 0.95 && operatorController.getRawAxis(1) > -0.95 && operatorController.getRawAxis(0) < 0.95 && operatorController.getRawAxis(0) > -0.95
+        ) {
+            intakein();
+        }
     }
         if(
             Rintakeout == true
         ) {
-            m_rightIntakeEnc.setPosition(40);
+            m_rightIntakeEnc.setPosition(5.55);
             Rintakeout = false;
             System.out.println("R Intake Out");
         }
         else if(
             Lintakeout == true
         ) {
-            m_leftIntakeEnc.setPosition(40);
+            m_leftIntakeEnc.setPosition(5.55);
             Lintakeout = false;
             System.out.println("L Intake Out");
         }
@@ -144,28 +164,28 @@ public class IntakeSys extends SubsystemBase {
             System.out.println("L Intake In");
         }
         else if (Lintakeoutrun == true) {
-            m_leftIntakeEnc.setPosition(0);
+            m_leftIntakeEnc.setPosition(5.55);
             m_bottomLeftRollerMtr.set(1);
             m_topLeftRollerMtr.set(-1);
             Lintakeoutrun = false;
             System.out.println("Left Intake Out & Running");
         }
         else if (Rintakeoutrun == true){
-            m_rightIntakeEnc.setPosition(0);
+            m_rightIntakeEnc.setPosition(5.55);
             m_bottomRightRollerMtr.set(1);
             m_topRightRollerMtr.set(-1);
             Rintakeoutrun = false;
             System.out.println("Right Intake Out and Running");
         }
         else if (Lintakeoutrunbwd == true){
-            m_leftIntakeEnc.setPosition(0);
+            m_leftIntakeEnc.setPosition(5.55);
             m_bottomLeftRollerMtr.set(-1);
             m_topLeftRollerMtr.set(1);
             Lintakeoutrunbwd = false;
             System.out.println("Left Intake Out & Running Back");
         }
         else if (Rintakeoutrunbwd == true){
-            m_rightIntakeEnc.setPosition(0);
+            m_rightIntakeEnc.setPosition(5.55);
             m_bottomRightRollerMtr.set(-1);
             m_topRightRollerMtr.set(1);
             Rintakeoutrunbwd = false;

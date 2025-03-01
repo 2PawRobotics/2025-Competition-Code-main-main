@@ -1,0 +1,75 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Red Path #1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "lvl4"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.0
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "releaseCoral"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Red Path #2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "lvl0"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Lintakeoutrun"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "conveyor"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
