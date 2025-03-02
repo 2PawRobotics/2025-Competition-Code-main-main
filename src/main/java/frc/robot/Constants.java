@@ -68,7 +68,7 @@ public class Constants {
         public static final int m_conveyorMtrId = 20;
 
         //EndEffector
-        public static final int m_coralReleaseSevCnl = 1;
+        public static final int m_coralReleaseSevCnl = 9;
        
     }
 
@@ -216,9 +216,9 @@ public class Constants {
     
         public static final int stallLimitAmps = 25;
         public static final int freeLimitAmps = 50;
-        public static final int maxRPM = 2000;
+        public static final int maxRPM = 1;
 
-        public static final double gearRatio = 5;
+        //public static final double gearRatio = 5;
 
     }
 
@@ -226,7 +226,7 @@ public class Constants {
 
         public static final int stallLimitAmps = 10;
         public static final int freeLimitAmps = 25;
-        public static final int maxRPM = 1;
+        public static final int maxRPM = 50;
 
     }
 

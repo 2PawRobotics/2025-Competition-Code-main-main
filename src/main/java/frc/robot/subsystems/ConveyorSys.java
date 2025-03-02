@@ -10,7 +10,7 @@ import frc.robot.RobotContainer;
 
 public class ConveyorSys extends SubsystemBase {
     
-    public static SparkMax m_conveyorMtr = new SparkMax(CANDevices.m_conveyorMtrId, MotorType.kBrushless);
+    public static SparkMax m_conveyorMtr = new SparkMax(CANDevices.m_conveyorMtrId, MotorType.kBrushed);
 
     private boolean ConveyorFwd = false;
     private boolean ConveyorBwd = false;
@@ -29,14 +29,14 @@ public class ConveyorSys extends SubsystemBase {
 
         if (ConveyorFwd == true && ConveyorBwd == false
         ) {
-            m_conveyorMtr.set(1);
+            m_conveyorMtr.set(0.4);
             ConveyorFwd = false;
             ConveyorStp = true;
             System.out.println("Conveyor Fwd");
         }
         else if (ConveyorBwd == true && ConveyorFwd == true
         ) {
-            m_conveyorMtr.set(-1);
+            m_conveyorMtr.set(-0.4);
             ConveyorBwd = false;
             ConveyorFwd = false;
             ConveyorStp = true;
