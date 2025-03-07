@@ -17,7 +17,6 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import frc.robot.Constants.CANDevices;
 import frc.robot.Constants.LiftConstants;
 
-import com.revrobotics.REVLibError;
 
 public class LiftSys extends SubsystemBase {
     
@@ -35,6 +34,20 @@ public class LiftSys extends SubsystemBase {
     private boolean islvl1Called = false;
     private boolean islvl0Called = false;
 
+    public LiftSys() {
+
+        m_leftliftEnc.setPosition(0);
+        m_rightliftEnc.setPosition(0);
+
+        config.idleMode(IdleMode.kCoast).smartCurrentLimit(0, 0, 0);
+
+        m_leftLiftMtr.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        m_rightLiftMtr.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+        //m_leftLiftMtr.configureAsync(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        //m_rightLiftMtr.configureAsync(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    }
 
     public boolean islvl4Called() {
         return islvl4Called = true;
@@ -55,6 +68,7 @@ public class LiftSys extends SubsystemBase {
     public boolean islvl0Called() {
         return islvl0Called = true;
     }
+        
 
     public void lvl4() {
         islvl4Called = true;
@@ -75,70 +89,62 @@ public class LiftSys extends SubsystemBase {
     public void lvl0() {
         islvl0Called = true;
     }
-
+        
     @Override
     public void periodic() {
 
         if (DriverStation.isEnabled() == true) {
-
-        if(
-            islvl4Called == true
-        ){
-            m_leftliftEnc.setPosition(1);
-            m_rightliftEnc.setPosition(1);
+        
+        if (islvl4Called == true && (m_leftliftEnc.getPosition() < 20) && (m_rightliftEnc.getPosition() > 20)) {
+            m_leftLiftMtr.set(-0.025);
+            m_rightLiftMtr.set(-0.025);
+            islvl4Called = false;
+            islvl0Called = true;
+        }
+        else if (islvl4Called == true && (m_leftliftEnc.getPosition() < 20) && (m_rightliftEnc.getPosition() < 20)) {
+            m_leftLiftMtr.set(0.025);
+            m_rightLiftMtr.set(0.025);
             islvl4Called = false;
             islvl0Called = true;
             System.out.println("At level 4");
         }
-        else if (
-            islvl3Called == true
-        ){
-            m_leftliftEnc.setPosition(0.75);
-            m_rightliftEnc.setPosition(0.75);
+        else if (islvl3Called == true && (m_leftliftEnc.getPosition() < 15) && (m_rightliftEnc.getPosition() < 20)) {
+            m_leftLiftMtr.set(0.025);
+            m_rightLiftMtr.set(0.025);
             islvl3Called = false;
             islvl0Called = true;
             System.out.println("At level 3");
         }
-        else if (
-            islvl2Called == true
-        ) {
-            m_leftliftEnc.setPosition(0.50);
-            m_rightliftEnc.setPosition(0.50);
+        else if (islvl2Called == true && (m_leftliftEnc.getPosition() < 10) && (m_rightliftEnc.getPosition() < 20)) {
+            m_leftLiftMtr.set(0.025);
+            m_rightLiftMtr.set(0.025);
             System.out.println("At level 2");
             islvl2Called = false;
             islvl0Called = true;
         }
-        else if (
-            islvl1Called == true
-        ) {
-            m_leftliftEnc.setPosition(0.25);
-            m_rightliftEnc.setPosition(0.25);
+        else if (islvl1Called == true && (m_leftliftEnc.getPosition() < 5) && (m_rightliftEnc.getPosition() < 20)) {
+            m_leftLiftMtr.set(-0.1);
+            m_rightLiftMtr.set(0.1);
             System.out.println("At level 1");
             islvl1Called = false;
             islvl0Called = true;
         }
-        else if (
-            islvl0Called == true
-        ) {
-            m_leftliftEnc.setPosition(0);
-            m_rightliftEnc.setPosition(0);
+        else if (islvl0Called == true && (m_leftliftEnc.getPosition() == 0) && (m_rightliftEnc.getPosition() == 0)) {
+            m_leftLiftMtr.set(-0.025);
+            m_rightLiftMtr.set(-0.025);
+            System.out.println("LOWERING IN PROGRESS");
+        }
+        else if (islvl0Called == true) {
+            m_leftLiftMtr.set(0);
+            m_rightLiftMtr.set(0);
             System.out.println("At level 0");
+        }
+        else {
+            m_leftLiftMtr.set(0);
+            m_rightLiftMtr.set(0);
         }
     }
     } 
 
-    public LiftSys() {
 
-        m_leftliftEnc.setPosition(0);
-        m_rightliftEnc.setPosition(0);
-
-        config.idleMode(IdleMode.kCoast).smartCurrentLimit(
-        LiftConstants.stallLimitAmps, 
-        LiftConstants.freeLimitAmps, 
-        LiftConstants.maxRPM);
-
-        m_leftLiftMtr.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        m_rightLiftMtr.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
-    }
 }

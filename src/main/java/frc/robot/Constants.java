@@ -91,13 +91,13 @@ public class Constants {
          * The track width from wheel center to wheel center.
          */
         // Make sure to measure from the center of each wheel
-        public static final double trackWidth = Units.inchesToMeters(19.6875);
+        public static final double trackWidth = Units.inchesToMeters(23.75);
 
         /**
          * The track length from wheel center to wheel center.
          */
         // mature sure to measure from the center of each wheel
-        public static final double wheelBase = Units.inchesToMeters(19.6875);
+        public static final double wheelBase = Units.inchesToMeters(23.75);
 
         /**
          * The SwerveDriveKinematics used for control and odometry.
@@ -151,10 +151,10 @@ public class Constants {
         // The bolt heads should be pointing to the right. These values are subtracted from the CANCoder reading,
         // so they should be the raw CANCoder value when set straight. These values should be between 0 and 360
         // degrees.
-        public static final Rotation2d frontLeftModOffset = Rotation2d.fromDegrees(124.09); // 122.43, 318.164, 135.97
-        public static final Rotation2d frontRightModOffset = Rotation2d.fromDegrees(117.9); // 184.12, 234.756, 134.5
+        public static final Rotation2d frontLeftModOffset = Rotation2d.fromDegrees(-120.23); // 122.43, 318.164, 135.97, 124.09
+        public static final Rotation2d frontRightModOffset = Rotation2d.fromDegrees(18.72); // 184.12, 234.756, 134.5
         public static final Rotation2d backLeftModOffset = Rotation2d.fromDegrees(-150.01); // 62, 252.15804, -164.5
-        public static final Rotation2d backRightModOffset = Rotation2d.fromDegrees(10.36); // 82.7, 252.15804, 40.07
+        public static final Rotation2d backRightModOffset = Rotation2d.fromDegrees(-51.42); // 82.7, 252.15804, 40.07
 
         // You may want to change this value.
         public static final int driveCurrentLimitAmps = 70;
