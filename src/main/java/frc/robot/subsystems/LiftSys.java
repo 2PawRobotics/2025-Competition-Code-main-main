@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
@@ -26,7 +27,6 @@ public class LiftSys extends SubsystemBase {
     RelativeEncoder m_leftliftEnc = m_leftLiftMtr.getEncoder();
     RelativeEncoder m_rightliftEnc = m_rightLiftMtr.getEncoder();
 
-    SparkMaxConfig config = new SparkMaxConfig();
 
     private boolean islvl4Called = false;
     private boolean islvl3Called = false;
@@ -36,13 +36,23 @@ public class LiftSys extends SubsystemBase {
 
     public LiftSys() {
 
+        SparkMaxConfig rightConfig = new SparkMaxConfig();
+        SparkMaxConfig leftConfig = new SparkMaxConfig();
+
         m_leftliftEnc.setPosition(0);
         m_rightliftEnc.setPosition(0);
 
-        config.idleMode(IdleMode.kCoast).smartCurrentLimit(0, 0, 0);
+        rightConfig.inverted(false).idleMode(IdleMode.kCoast);
+        rightConfig.closedLoop.pid(1,0,0);
 
-        m_leftLiftMtr.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        m_rightLiftMtr.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        leftConfig.inverted(false).idleMode(IdleMode.kCoast);
+        rightConfig.closedLoop.pid(1,0,0);
+
+        m_leftLiftMtr.configure(leftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        m_rightLiftMtr.configure(rightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+        PIDController leftLiftController = new PIDController(1,0,0);
+        PIDController rightLiftController = new PIDController(1,0,0);
 
         //m_leftLiftMtr.configureAsync(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         //m_rightLiftMtr.configureAsync(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -108,23 +118,23 @@ public class LiftSys extends SubsystemBase {
             islvl0Called = true;
             System.out.println("At level 4");
         }
-        else if (islvl3Called == true && (m_leftliftEnc.getPosition() < 15) && (m_rightliftEnc.getPosition() < 20)) {
+        else if (islvl3Called == true && (m_leftliftEnc.getPosition() < 15) && (m_rightliftEnc.getPosition() < 15)) {
             m_leftLiftMtr.set(0.025);
             m_rightLiftMtr.set(0.025);
             islvl3Called = false;
             islvl0Called = true;
             System.out.println("At level 3");
         }
-        else if (islvl2Called == true && (m_leftliftEnc.getPosition() < 10) && (m_rightliftEnc.getPosition() < 20)) {
+        else if (islvl2Called == true && (m_leftliftEnc.getPosition() < 10) && (m_rightliftEnc.getPosition() < 10)) {
             m_leftLiftMtr.set(0.025);
             m_rightLiftMtr.set(0.025);
             System.out.println("At level 2");
             islvl2Called = false;
             islvl0Called = true;
         }
-        else if (islvl1Called == true && (m_leftliftEnc.getPosition() < 5) && (m_rightliftEnc.getPosition() < 20)) {
-            m_leftLiftMtr.set(-0.1);
-            m_rightLiftMtr.set(0.1);
+        else if (islvl1Called == true && (m_leftliftEnc.getPosition() < 5) && (m_rightliftEnc.getPosition() < 5)) {
+            m_leftLiftMtr.set(-0.15);
+            m_rightLiftMtr.set(0.15);
             System.out.println("At level 1");
             islvl1Called = false;
             islvl0Called = true;
