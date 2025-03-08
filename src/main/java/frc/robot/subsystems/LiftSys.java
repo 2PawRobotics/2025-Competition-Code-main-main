@@ -42,17 +42,14 @@ public class LiftSys extends SubsystemBase {
         m_leftliftEnc.setPosition(0);
         m_rightliftEnc.setPosition(0);
 
-        rightConfig.inverted(false).idleMode(IdleMode.kCoast);
-        rightConfig.closedLoop.pid(1,0,0);
+        leftConfig.idleMode(IdleMode.kCoast);
+        leftConfig.closedLoop.pid(2.5,0,0.5);
 
-        leftConfig.inverted(false).idleMode(IdleMode.kCoast);
-        rightConfig.closedLoop.pid(1,0,0);
+        rightConfig.idleMode(IdleMode.kCoast);
+        rightConfig.closedLoop.pid(2.5,0,0.5);
 
         m_leftLiftMtr.configure(leftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         m_rightLiftMtr.configure(rightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
-        PIDController leftLiftController = new PIDController(1,0,0);
-        PIDController rightLiftController = new PIDController(1,0,0);
 
         //m_leftLiftMtr.configureAsync(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         //m_rightLiftMtr.configureAsync(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -104,6 +101,9 @@ public class LiftSys extends SubsystemBase {
     public void periodic() {
 
         if (DriverStation.isEnabled() == true) {
+
+            System.out.println("Left lift encoder: " + m_leftliftEnc.getPosition());
+            System.out.println("Left right encoder: " + m_rightliftEnc.getPosition());
         
         if (islvl4Called == true && (m_leftliftEnc.getPosition() < 20) && (m_rightliftEnc.getPosition() > 20)) {
             m_leftLiftMtr.set(-0.025);
@@ -132,23 +132,23 @@ public class LiftSys extends SubsystemBase {
             islvl2Called = false;
             islvl0Called = true;
         }
-        else if (islvl1Called == true && (m_leftliftEnc.getPosition() < 5) && (m_rightliftEnc.getPosition() < 5)) {
+        else if (islvl1Called == true && (m_leftliftEnc.getPosition() > -5) && (m_rightliftEnc.getPosition() < 5)) {
             m_leftLiftMtr.set(-0.15);
             m_rightLiftMtr.set(0.15);
             System.out.println("At level 1");
             islvl1Called = false;
             islvl0Called = true;
         }
-        else if (islvl0Called == true && (m_leftliftEnc.getPosition() == 0) && (m_rightliftEnc.getPosition() == 0)) {
-            m_leftLiftMtr.set(-0.025);
-            m_rightLiftMtr.set(-0.025);
+        else if (islvl0Called == true && (m_leftliftEnc.getPosition() < -0.3) && (m_rightliftEnc.getPosition() > 0.3)) {
+            m_leftLiftMtr.set(0.10);
+            m_rightLiftMtr.set(-0.10);
             System.out.println("LOWERING IN PROGRESS");
         }
-        else if (islvl0Called == true) {
+        /*else if (islvl0Called == true) {
             m_leftLiftMtr.set(0);
             m_rightLiftMtr.set(0);
             System.out.println("At level 0");
-        }
+        }*/
         else {
             m_leftLiftMtr.set(0);
             m_rightLiftMtr.set(0);
