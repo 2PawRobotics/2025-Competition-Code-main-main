@@ -6,6 +6,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -36,19 +37,24 @@ public class LiftSys extends SubsystemBase {
     private boolean islvl1Called = false;
     private boolean islvl0Called = false;
 
+    //private final SlewRateLimiter limit;
+
     public LiftSys() {
 
+    
         SparkMaxConfig rightConfig = new SparkMaxConfig();
         SparkMaxConfig leftConfig = new SparkMaxConfig();
+
+        //limit = new SlewRateLimiter(2);
 
         m_leftliftEnc.setPosition(0);
         m_rightliftEnc.setPosition(0);
 
-        leftConfig.idleMode(IdleMode.kCoast);
+        leftConfig.idleMode(IdleMode.kBrake);
         leftConfig.closedLoop.pid(0,0.00025,0);
         //leftConfig.encoder.inverted(true);
 
-        rightConfig.idleMode(IdleMode.kCoast);
+        rightConfig.idleMode(IdleMode.kBrake);
         rightConfig.closedLoop.pid(0,0.00025,0);
         
 
@@ -109,7 +115,8 @@ public class LiftSys extends SubsystemBase {
         double masterPose = m_leftliftEnc.getPosition();
 
         if (-masterPose > m_rightliftEnc.getPosition()){
-            m_rightLiftMtr.set(0.175);
+            //m_rightLiftMtr.set(limit.calculate(0.325));
+            m_rightLiftMtr.set(0.225);
         }
         else if (-masterPose < m_rightliftEnc.getPosition()){
             m_rightLiftMtr.set(-0.1);
@@ -153,7 +160,8 @@ public class LiftSys extends SubsystemBase {
             islvl0Called = true;
         }
         else if (islvl1Called == true && (m_leftliftEnc.getPosition() > -5) && (m_rightliftEnc.getPosition() < 5)) {
-            m_leftLiftMtr.set(-0.15);
+            //m_leftLiftMtr.set(limit.calculate(-0.3));
+            m_leftLiftMtr.set(-0.2);
             System.out.println("At level 1");
             islvl1Called = false;
             islvl0Called = true;

@@ -151,10 +151,10 @@ public class Constants {
         // The bolt heads should be pointing to the right. These values are subtracted from the CANCoder reading,
         // so they should be the raw CANCoder value when set straight. These values should be between 0 and 360
         // degrees.
-        public static final Rotation2d frontLeftModOffset = Rotation2d.fromDegrees(-120.23); // 122.43, 318.164, 135.97, 124.09
-        public static final Rotation2d frontRightModOffset = Rotation2d.fromDegrees(18.72); // 184.12, 234.756, 134.5
-        public static final Rotation2d backLeftModOffset = Rotation2d.fromDegrees(-150.01); // 62, 252.15804, -164.5
-        public static final Rotation2d backRightModOffset = Rotation2d.fromDegrees(13.45); // 82.7, 252.15804, 40.07
+        public static final Rotation2d frontLeftModOffset = Rotation2d.fromDegrees(-126.2988); // 122.43, 318.164, 135.97, 124.09, -120.23
+        public static final Rotation2d frontRightModOffset = Rotation2d.fromDegrees(-92.81232); // 184.12, 234.756, 134.5, 18.72, 87.28
+        public static final Rotation2d backLeftModOffset = Rotation2d.fromDegrees(157.06044); // 62, 252.15804, -164.5, -150.01
+        public static final Rotation2d backRightModOffset = Rotation2d.fromDegrees(-160.31232); // 82.7, 252.15804, 40.07, 14.5
 
         // You may want to change this value.
         public static final int driveCurrentLimitAmps = 70;

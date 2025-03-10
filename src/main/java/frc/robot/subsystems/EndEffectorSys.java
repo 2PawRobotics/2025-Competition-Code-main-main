@@ -23,13 +23,13 @@ public class EndEffectorSys extends SubsystemBase {
         if(
             releaseCoral == true
         ) {
-            m_Servo.set(.5);
+            m_Servo.set(0);
             releaseCoral = false;
         }
         else if(
             releaseCoral == false
         ) {
-            m_Servo.set(0);
+            m_Servo.set(0.5);
         }
     }
 }

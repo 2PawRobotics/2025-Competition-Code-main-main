@@ -107,8 +107,10 @@ public class IntakeSys extends SubsystemBase {
         
     }
 
-    double rollerSpeed = -0.3;
-    double reverseRollerSpeed = 0.3;
+    double topRollerSpeed = 0.5;
+    double bottomRollerSpeed = 0.7;
+    double reverseTopRollerSpeed = -0.5;
+    double reverseBottomRollerSpeed = -0.7;
 
     @Override
     public void periodic() {
@@ -167,10 +169,10 @@ public class IntakeSys extends SubsystemBase {
             //System.out.println("L Intake In");
             m_leftIntakeMtr.set(0.5);
         }*/
-        if (Lintakeoutrun == true) {
-            m_leftIntakeMtr.set(0.25);
-            m_bottomLeftRollerMtr.set(reverseRollerSpeed);
-            m_topLeftRollerMtr.set(reverseRollerSpeed);
+        if (Lintakeoutrun == true && m_leftIntakeEnc.getPosition() > -32) {
+            m_leftIntakeMtr.set(-0.25);
+            m_bottomLeftRollerMtr.set(reverseBottomRollerSpeed);
+            m_topLeftRollerMtr.set(reverseTopRollerSpeed);
             Lintakeoutrun = false;
             System.out.println("Left Intake Out & Running");
         }
@@ -181,10 +183,10 @@ public class IntakeSys extends SubsystemBase {
             Rintakeoutrun = false;
             System.out.println("Right Intake Out and Running");
         }*/
-        else if (Lintakeoutrunbwd == true){
+        else if (Lintakeoutrunbwd == true && m_leftIntakeEnc.getPosition() > -32) {
             m_leftIntakeMtr.set(0.25);
-            m_bottomLeftRollerMtr.set(rollerSpeed);
-            m_topLeftRollerMtr.set(rollerSpeed);
+            m_bottomLeftRollerMtr.set(bottomRollerSpeed);
+            m_topLeftRollerMtr.set(topRollerSpeed);
             Lintakeoutrunbwd = false;
             System.out.println("Left Intake Out & Running Back");
         }
@@ -198,6 +200,8 @@ public class IntakeSys extends SubsystemBase {
         else if (Lintakeout == true && m_leftIntakeEnc.getPosition() > -32) {
             //System.out.println(m_leftIntakeEnc.getDistance());
             m_leftIntakeMtr.set(-0.25);
+            m_bottomLeftRollerMtr.set(0);
+            m_topLeftRollerMtr.set(0);
             Lintakeout = false;
             System.out.println("L Intake Out");
         }
