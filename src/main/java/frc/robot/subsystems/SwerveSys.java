@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 
 public class SwerveSys extends SubsystemBase {
 
@@ -181,9 +182,22 @@ public class SwerveSys extends SubsystemBase {
     );
     }
 
+    StructArrayPublisher<SwerveModuleState> measuredStatePublisher = NetworkTableInstance.getDefault()
+    .getStructArrayTopic("StatesMeasured", SwerveModuleState.struct).publish();
+
+
     // This method will be called once per scheduler run
     @Override
     public void periodic() {
+
+        SwerveModuleState[] measuredStates = new SwerveModuleState[] {
+            new SwerveModuleState(frontLeftMod.getVelocityMetersPerSec(), frontLeftMod.getSteerEncAngle()),
+            new SwerveModuleState(frontRightMod.getVelocityMetersPerSec(), frontRightMod.getSteerEncAngle()),
+            new SwerveModuleState(backLeftMod.getVelocityMetersPerSec(), backLeftMod.getSteerEncAngle()),
+            new SwerveModuleState(backRightMod.getVelocityMetersPerSec(), backRightMod.getSteerEncAngle())
+            };
+    
+
         // Updates the odometry every 20ms
         poseEstimator.update(imu.getRotation2d(), getModulePositions());
 
@@ -198,6 +212,9 @@ public class SwerveSys extends SubsystemBase {
                 //System.out.println("Hello World");
             }
         }
+
+        measuredStatePublisher.set(measuredStates);
+
     //read values periodically
     double x = tx.getDouble(0.0);
     double y = ty.getDouble(0.0);

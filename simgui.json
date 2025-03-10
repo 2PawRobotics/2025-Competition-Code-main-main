@@ -11,6 +11,13 @@
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/Alerts": "Alerts",
       "/SmartDashboard/auto selector": "String Chooser"
+    },
+    "windows": {
+      "/SmartDashboard/auto selector": {
+        "window": {
+          "visible": true
+        }
+      }
     }
   },
   "NetworkTables Info": {

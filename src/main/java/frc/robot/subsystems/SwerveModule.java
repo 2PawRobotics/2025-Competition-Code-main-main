@@ -5,6 +5,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.sim.SparkFlexSim;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -17,6 +18,14 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N2;
+import edu.wpi.first.math.system.LinearSystem;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 
@@ -29,6 +38,12 @@ public class SwerveModule extends SubsystemBase {
 
     private final SparkFlex driveMtr;
     private final SparkFlex steerMtr;
+
+    private final SparkFlexSim steeringFlexSim;
+    private final SparkFlexSim drivingFlexSim;
+
+    private final DCMotorSim steeringSim;
+    private final DCMotorSim drivingSim;
 
     private final RelativeEncoder driveEnc;
     private final RelativeEncoder steerEnc;
@@ -93,6 +108,52 @@ public class SwerveModule extends SubsystemBase {
 
         // Initializes the steer encoder position to the CANCoder position, accounting for offset.
         steerEnc.setPosition(getCanCoderAngle().getRadians() - offset.getRadians());
+
+        steeringFlexSim = new SparkFlexSim(steerMtr, DCMotor.getNeoVortex(1));
+        drivingFlexSim = new SparkFlexSim(driveMtr, DCMotor.getNeoVortex(1));
+
+        DCMotor gearbox = DCMotor.getNeoVortex(1); // One motor for a drive or steering sim
+        double momentOfInertia = 0.00032; // Moment of inertia in kg·m²
+        LinearSystem<N2, N1, N2> dcMotorPlantDrive =
+            LinearSystemId.createDCMotorSystem(
+            DriveConstants.kvVoltSecsPerMeter,
+            DriveConstants.kaVoltSecsPerMeterSq);
+
+        LinearSystem<N2, N1, N2> dcMotorPlantSteer = LinearSystemId.createDCMotorSystem(DCMotor.getNeoVortex(1),
+        0.004,
+        1/DriveConstants.steerMtrGearReduction);
+       
+        steeringSim = new DCMotorSim(dcMotorPlantSteer, gearbox);
+        drivingSim = new DCMotorSim(dcMotorPlantDrive, gearbox);
+
+    }
+
+    @Override
+    public void periodic() {
+        steeringSim.setInputVoltage(steeringFlexSim.getAppliedOutput() * 12.0);
+        drivingSim.setInputVoltage(drivingFlexSim.getAppliedOutput() * 12.0);
+        // Update Sims
+        steeringSim.update(0.02);
+        drivingSim.update(0.02);
+
+        steeringFlexSim.iterate(
+            Units.radiansPerSecondToRotationsPerMinute(steeringSim.getAngularVelocityRadPerSec()),
+            12, 0.02
+        );
+       
+        drivingFlexSim.iterate(
+            Units.radiansPerSecondToRotationsPerMinute(drivingSim.getAngularVelocityRadPerSec()),
+            12,
+            0.02
+        );
+
+        canCoder.getSimState().setRawPosition(steeringSim.getAngularPositionRotations());
+
+        SmartDashboard.putNumber("driveMotor/id" + driveMtr.getDeviceId() + "/simPos", drivingSim.getAngularPositionRad());
+
+        /*steeringSim.setAngle(Units.radiansToDegrees(steeringSim.getAngularPositionRad()));
+        drivingSim.setAngle(Units.radiansToDegrees(drivingSim.getAngularPositionRad()));*/
+
     }
 
     /**
