@@ -20,18 +20,18 @@ import com.revrobotics.RelativeEncoder;
 public class IntakeSys extends SubsystemBase {
     public final static CommandXboxController operatorController = new CommandXboxController(ControllerConstants.operatorGamepadPort);
 
-    public static SparkMax m_leftIntakeMtr = new SparkMax(CANDevices.m_rightIntakeMtrId, MotorType.kBrushed);
-    public static SparkMax m_rightIntakeMtr = new SparkMax(CANDevices.m_leftIntakeMtrId, MotorType.kBrushed);
-    public static SparkMax m_bottomRightRollerMtr = new SparkMax(CANDevices.m_bottomRightRollerMtrId, MotorType.kBrushed);
-    public static SparkMax m_topRightRollerMtr = new SparkMax(CANDevices.m_topRightRollerMtrId, MotorType.kBrushed);
+    public static SparkMax m_leftIntakeMtr = new SparkMax(CANDevices.m_rightIntakeMtrId, MotorType.kBrushless);
+    //public static SparkMax m_rightIntakeMtr = new SparkMax(CANDevices.m_leftIntakeMtrId, MotorType.kBrushed);
+    //public static SparkMax m_bottomRightRollerMtr = new SparkMax(CANDevices.m_bottomRightRollerMtrId, MotorType.kBrushed);
+    //public static SparkMax m_topRightRollerMtr = new SparkMax(CANDevices.m_topRightRollerMtrId, MotorType.kBrushed);
     public static SparkMax m_topLeftRollerMtr = new SparkMax(CANDevices.m_topLeftRollerMtrId, MotorType.kBrushed);
     public static SparkMax m_bottomLeftRollerMtr = new SparkMax(CANDevices.m_bottomLeftRollerMtrId, MotorType.kBrushed);
 
     /*public static RelativeEncoder m_rightIntakeEnc = m_rightIntakeMtr.getEncoder();
     public static RelativeEncoder m_leftIntakeEnc = m_leftIntakeMtr.getEncoder();*/
 
-    Encoder m_rightIntakeEnc;
-    Encoder m_leftIntakeEnc;
+    RelativeEncoder m_rightIntakeEnc;
+    RelativeEncoder m_leftIntakeEnc;
 
     SparkMaxConfig intakeConfig = new SparkMaxConfig();
     SparkMaxConfig rollerConfig = new SparkMaxConfig();
@@ -84,12 +84,9 @@ public class IntakeSys extends SubsystemBase {
 
     public IntakeSys() {
 
-        intakeConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(
-        PivotConstants.stallLimitAmps, 
-        PivotConstants.freeLimitAmps, 
-        PivotConstants.maxRPM);
+        intakeConfig.idleMode(IdleMode.kBrake);
 
-        m_rightIntakeMtr.configure(intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        //m_rightIntakeMtr.configure(intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         m_leftIntakeMtr.configure(intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         /*rollerConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(
@@ -103,12 +100,10 @@ public class IntakeSys extends SubsystemBase {
         m_bottomRightRollerMtr.configure(rollerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         */
         
-        m_rightIntakeEnc = new Encoder(3, 2, false);
-        m_leftIntakeEnc = new Encoder(1, 0, true);
+        //m_rightIntakeEnc = m_rightIntakeMtr.getEncoder();
+        m_leftIntakeEnc = m_leftIntakeMtr.getEncoder();
 
-        m_leftIntakeEnc.reset();
-
-        m_leftIntakeEnc.setDistancePerPulse(3);
+        m_leftIntakeEnc.setPosition(0);
         
     }
 
@@ -150,7 +145,10 @@ public class IntakeSys extends SubsystemBase {
         ) {
             intakein();
             //System.out.println("Intake in working");
-            System.out.println(m_leftIntakeEnc.getDistance());
+            System.out.println(m_leftIntakeEnc.getPosition());
+        }
+        else {
+            Lintakein();
         }
     }
         /*if (Rintakeout == true) {
@@ -163,13 +161,14 @@ public class IntakeSys extends SubsystemBase {
             //Rintakein = false;
             System.out.println("R Intake In");
         }*/
-        if (Lintakein == true) {
+        /*if (Lintakein == true && m_leftIntakeEnc.getPosition() < 0) {
             //m_leftIntakeMtr.set(0);
             //Lintakein = false;
             //System.out.println("L Intake In");
-        }
-        else if (Lintakeoutrun == true) {
-            m_leftIntakeMtr.set(0.6);
+            m_leftIntakeMtr.set(0.5);
+        }*/
+        if (Lintakeoutrun == true) {
+            m_leftIntakeMtr.set(0.25);
             m_bottomLeftRollerMtr.set(reverseRollerSpeed);
             m_topLeftRollerMtr.set(reverseRollerSpeed);
             Lintakeoutrun = false;
@@ -183,7 +182,7 @@ public class IntakeSys extends SubsystemBase {
             System.out.println("Right Intake Out and Running");
         }*/
         else if (Lintakeoutrunbwd == true){
-            m_leftIntakeMtr.set(0.6);
+            m_leftIntakeMtr.set(0.25);
             m_bottomLeftRollerMtr.set(rollerSpeed);
             m_topLeftRollerMtr.set(rollerSpeed);
             Lintakeoutrunbwd = false;
@@ -196,9 +195,9 @@ public class IntakeSys extends SubsystemBase {
             Rintakeoutrunbwd = false;
             System.out.println("Left Intake Out & Running Back");
         }*/
-        else if (Lintakeout == true && m_leftIntakeEnc.getDistance() > -32.87) {
+        else if (Lintakeout == true && m_leftIntakeEnc.getPosition() > -32) {
             //System.out.println(m_leftIntakeEnc.getDistance());
-            m_leftIntakeMtr.set(-0.6);
+            m_leftIntakeMtr.set(-0.25);
             Lintakeout = false;
             System.out.println("L Intake Out");
         }
@@ -225,11 +224,16 @@ public class IntakeSys extends SubsystemBase {
             //intakein = false;
             System.out.println("intakes in");
         }*/
-        else if (m_leftIntakeEnc.getDistance() < 0){
-            m_leftIntakeMtr.set(0.6);
+        else if (m_leftIntakeEnc.getPosition() < -32 && m_leftIntakeEnc.getPosition() > -33 && Lintakeout == true){
+            m_leftIntakeMtr.set(0.07);
             System.out.println("Reverse Intake");
         }
-        else if (m_leftIntakeEnc.getDistance() > 0){
+        else if (m_leftIntakeEnc.getPosition() < -32 && m_leftIntakeEnc.getPosition() > -33 && intakein == true){
+            Lintakeout = false;
+            m_leftIntakeMtr.set(0.25);
+            System.out.println("Reverse Intake");
+        }
+        else if (m_leftIntakeEnc.getPosition() > 0){
             m_leftIntakeMtr.set(0);
         }
     }

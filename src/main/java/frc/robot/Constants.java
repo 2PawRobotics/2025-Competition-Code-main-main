@@ -154,7 +154,7 @@ public class Constants {
         public static final Rotation2d frontLeftModOffset = Rotation2d.fromDegrees(-120.23); // 122.43, 318.164, 135.97, 124.09
         public static final Rotation2d frontRightModOffset = Rotation2d.fromDegrees(18.72); // 184.12, 234.756, 134.5
         public static final Rotation2d backLeftModOffset = Rotation2d.fromDegrees(-150.01); // 62, 252.15804, -164.5
-        public static final Rotation2d backRightModOffset = Rotation2d.fromDegrees(-51.42); // 82.7, 252.15804, 40.07
+        public static final Rotation2d backRightModOffset = Rotation2d.fromDegrees(13.45); // 82.7, 252.15804, 40.07
 
         // You may want to change this value.
         public static final int driveCurrentLimitAmps = 70;

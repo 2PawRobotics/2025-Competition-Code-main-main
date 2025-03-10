@@ -27,6 +27,8 @@ public class LiftSys extends SubsystemBase {
     RelativeEncoder m_leftliftEnc = m_leftLiftMtr.getEncoder();
     RelativeEncoder m_rightliftEnc = m_rightLiftMtr.getEncoder();
 
+    double masterPose = m_leftliftEnc.getPosition();
+    double slavePose = m_rightliftEnc.getPosition();
 
     private boolean islvl4Called = false;
     private boolean islvl3Called = false;
@@ -43,16 +45,20 @@ public class LiftSys extends SubsystemBase {
         m_rightliftEnc.setPosition(0);
 
         leftConfig.idleMode(IdleMode.kCoast);
-        leftConfig.closedLoop.pid(2.5,0,0.5);
+        leftConfig.closedLoop.pid(0,0.00025,0);
+        //leftConfig.encoder.inverted(true);
 
         rightConfig.idleMode(IdleMode.kCoast);
-        rightConfig.closedLoop.pid(2.5,0,0.5);
+        rightConfig.closedLoop.pid(0,0.00025,0);
+        
 
         m_leftLiftMtr.configure(leftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         m_rightLiftMtr.configure(rightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         //m_leftLiftMtr.configureAsync(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         //m_rightLiftMtr.configureAsync(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+        
 
     }
 
@@ -100,10 +106,24 @@ public class LiftSys extends SubsystemBase {
     @Override
     public void periodic() {
 
+        double masterPose = m_leftliftEnc.getPosition();
+
+        if (-masterPose > m_rightliftEnc.getPosition()){
+            m_rightLiftMtr.set(0.175);
+        }
+        else if (-masterPose < m_rightliftEnc.getPosition()){
+            m_rightLiftMtr.set(-0.1);
+        }
+        else if (islvl0Called == true && (m_rightliftEnc.getPosition() > 0.3) && islvl1Called) {
+            m_rightLiftMtr.set(-0.001);
+        }
+        
+        
+
         if (DriverStation.isEnabled() == true) {
 
-            System.out.println("Left lift encoder: " + m_leftliftEnc.getPosition());
-            System.out.println("Left right encoder: " + m_rightliftEnc.getPosition());
+        System.out.println("Left lift encoder: " + m_leftliftEnc.getPosition());
+        System.out.println("Right lift encoder: " + m_rightliftEnc.getPosition());
         
         if (islvl4Called == true && (m_leftliftEnc.getPosition() < 20) && (m_rightliftEnc.getPosition() > 20)) {
             m_leftLiftMtr.set(-0.025);
@@ -134,14 +154,16 @@ public class LiftSys extends SubsystemBase {
         }
         else if (islvl1Called == true && (m_leftliftEnc.getPosition() > -5) && (m_rightliftEnc.getPosition() < 5)) {
             m_leftLiftMtr.set(-0.15);
-            m_rightLiftMtr.set(0.15);
             System.out.println("At level 1");
             islvl1Called = false;
             islvl0Called = true;
         }
-        else if (islvl0Called == true && (m_leftliftEnc.getPosition() < -0.3) && (m_rightliftEnc.getPosition() > 0.3)) {
-            m_leftLiftMtr.set(0.10);
-            m_rightLiftMtr.set(-0.10);
+        else if (islvl0Called == true && (m_leftliftEnc.getPosition() < -0.3) && islvl1Called) {
+            m_leftLiftMtr.set(0.001);
+            System.out.println("LOWERING IN PROGRESS");    
+        }
+        else if (islvl0Called == true && (m_leftliftEnc.getPosition() < -0.3)) {
+            m_leftLiftMtr.set(0.1);
             System.out.println("LOWERING IN PROGRESS");
         }
         /*else if (islvl0Called == true) {
@@ -153,6 +175,45 @@ public class LiftSys extends SubsystemBase {
             m_leftLiftMtr.set(0);
             m_rightLiftMtr.set(0);
         }
+        /*if (islvl1Called == true) {
+            if (m_leftliftEnc.getPosition() > m_rightliftEnc.getPosition()){
+                m_rightLiftMtr.set(-0.2);
+            }
+            if (m_leftliftEnc.getPosition() < m_rightliftEnc.getPosition()){
+                m_rightLiftMtr.set(0.2);
+            }
+        } 
+        else if (islvl2Called == true) {
+            if (m_leftliftEnc.getPosition() > m_rightliftEnc.getPosition()){
+                m_rightLiftMtr.set(-0.2);
+            }
+            else if (m_leftliftEnc.getPosition() < m_rightliftEnc.getPosition()){
+                m_rightLiftMtr.set(0.2);
+            }
+        }
+        else if (islvl3Called == true) {
+            if (m_leftliftEnc.getPosition() > m_rightliftEnc.getPosition()){
+                m_rightLiftMtr.set(-0.2);
+            }
+            else if (m_leftliftEnc.getPosition() < m_rightliftEnc.getPosition()){
+                m_rightLiftMtr.set(0.2);
+            }
+        } 
+        else if (islvl4Called == true) {
+            if (m_leftliftEnc.getPosition() > m_rightliftEnc.getPosition()){
+                m_rightLiftMtr.set(-0.2);
+            }
+            else if (m_leftliftEnc.getPosition() < m_rightliftEnc.getPosition()){
+                m_rightLiftMtr.set(0.2);
+            }
+        else {
+            islvl0Called = true;
+            islvl1Called = false;
+            islvl2Called = false;
+            islvl3Called = false;
+            islvl4Called = false;
+        }
+        } */
     }
     } 
 
