@@ -135,7 +135,7 @@ public class RobotContainer {
         lvl3ReefRight.whileTrue(new Lvl3Cmd(liftSys));
         lvl2ReefRight.whileTrue(new Lvl2Cmd(liftSys));
         lvl1ReefRight.whileTrue(new Lvl1Cmd(liftSys));
-        releaseCoral.toggleOnTrue(new ReleaseCoralCmd(endEffectorSys));
+        releaseCoral.whileTrue(new ReleaseCoralCmd(endEffectorSys));
         conveyorRun.whileTrue(new ConveyorCmd(conveyorSys));
 
     }

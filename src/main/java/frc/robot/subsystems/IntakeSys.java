@@ -226,15 +226,21 @@ public class IntakeSys extends SubsystemBase {
         }*/
         else if (m_leftIntakeEnc.getPosition() < -32 && m_leftIntakeEnc.getPosition() > -33 && Lintakeout == true){
             m_leftIntakeMtr.set(0.07);
+            m_bottomLeftRollerMtr.set(0);
+            m_topLeftRollerMtr.set(0);
             System.out.println("Reverse Intake");
         }
         else if (m_leftIntakeEnc.getPosition() < -32 && m_leftIntakeEnc.getPosition() > -33 && intakein == true){
             Lintakeout = false;
             m_leftIntakeMtr.set(0.25);
+            m_bottomLeftRollerMtr.set(0);
+            m_topLeftRollerMtr.set(0);
             System.out.println("Reverse Intake");
         }
         else if (m_leftIntakeEnc.getPosition() > 0){
             m_leftIntakeMtr.set(0);
+            m_bottomLeftRollerMtr.set(0);
+            m_topLeftRollerMtr.set(0);
         }
     }
 
