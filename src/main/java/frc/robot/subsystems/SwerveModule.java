@@ -75,7 +75,7 @@ public class SwerveModule extends SubsystemBase {
 
         SparkFlexConfig steerConfig = new SparkFlexConfig();
         steerConfig 
-            .inverted(false)
+            .inverted(true)
             .idleMode(IdleMode.kCoast);
         steerConfig.encoder
             .positionConversionFactor(DriveConstants.steerRadiansPerEncRev);
