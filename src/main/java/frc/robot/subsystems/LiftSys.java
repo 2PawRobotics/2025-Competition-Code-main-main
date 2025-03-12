@@ -109,7 +109,7 @@ public class LiftSys extends SubsystemBase {
         islvl0Called = true;
     }
         
-    double rightLiftSpeed = 0.325;
+    double rightLiftSpeed = 0.3;
     double leftLiftSpeed = -0.3;
 
     @Override
@@ -158,17 +158,21 @@ public class LiftSys extends SubsystemBase {
             islvl2Called = false;
             islvl0Called = true;
         }
-        else if (islvl1Called == true && (m_leftliftEnc.getPosition() > -7) && (m_rightliftEnc.getPosition() < 7)) {
+        else if (islvl1Called && m_leftliftEnc.getPosition() < -7) {
+            m_leftLiftMtr.set(-0.05);
+            m_rightLiftMtr.set(0.05);
+        }
+        else if (islvl1Called == true && (m_leftliftEnc.getPosition() > -7)) {
             //m_leftLiftMtr.set(limit.calculate(-0.3));
             m_leftLiftMtr.set(leftLiftSpeed);
             System.out.println("At level 1");
             islvl1Called = false;
             islvl0Called = true;
         }
-        else if (islvl0Called == true && (m_leftliftEnc.getPosition() < -0.3) && islvl1Called) {
+        /*else if (islvl0Called == true && (m_leftliftEnc.getPosition() < -0.3) && islvl1Called) {
             m_leftLiftMtr.set(0.001);
             System.out.println("LOWERING IN PROGRESS");    
-        }
+        }*/
         else if (islvl0Called == true && (m_leftliftEnc.getPosition() < -0.3)) {
             m_leftLiftMtr.set(0.1);
             System.out.println("LOWERING IN PROGRESS");
