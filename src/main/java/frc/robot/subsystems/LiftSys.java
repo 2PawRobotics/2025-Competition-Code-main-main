@@ -135,32 +135,48 @@ public class LiftSys extends SubsystemBase {
         //System.out.println("Left lift encoder: " + m_leftliftEnc.getPosition());
         //System.out.println("Right lift encoder: " + m_rightliftEnc.getPosition());
         
-        if (islvl4Called == true && (m_leftliftEnc.getPosition() < -20) && (m_rightliftEnc.getPosition() > 20)) {
-            m_leftLiftMtr.set(0.2);
+        
+        if (islvl4Called && m_leftliftEnc.getPosition() < -20) {
+            m_leftLiftMtr.set(-0.05);
+            m_rightLiftMtr.set(0.05);
             islvl4Called = false;
             islvl0Called = true;
         }
-        else if (islvl4Called == true && (m_leftliftEnc.getPosition() > -20) && (m_rightliftEnc.getPosition() < 20)) {
+        else if (islvl4Called == true && (m_leftliftEnc.getPosition() > -20)) {
             m_leftLiftMtr.set(leftLiftSpeed);
             islvl4Called = false;
             islvl0Called = true;
             System.out.println("At level 4");
         }
-        else if (islvl3Called == true && (m_leftliftEnc.getPosition() > -15) && (m_rightliftEnc.getPosition() < 15)) {
+        else if (islvl3Called && m_leftliftEnc.getPosition() < -15) {
+            m_leftLiftMtr.set(-0.05);
+            m_rightLiftMtr.set(0.05);
+            islvl3Called = false;
+            islvl0Called = true;
+        }
+        else if (islvl3Called == true && (m_leftliftEnc.getPosition() > -15)) {
             m_leftLiftMtr.set(leftLiftSpeed);
             islvl3Called = false;
             islvl0Called = true;
             System.out.println("At level 3");
         }
-        else if (islvl2Called == true && (m_leftliftEnc.getPosition() > -10) && (m_rightliftEnc.getPosition() < 10)) {
+        else if (islvl2Called && m_leftliftEnc.getPosition() < -10) {
+            m_leftLiftMtr.set(-0.05);
+            m_rightLiftMtr.set(0.05);
+            islvl2Called = false;
+            islvl0Called = true;
+        }
+        else if (islvl2Called == true && (m_leftliftEnc.getPosition() > -10)) {
             m_leftLiftMtr.set(leftLiftSpeed);
             System.out.println("At level 2");
             islvl2Called = false;
             islvl0Called = true;
         }
-        else if (islvl1Called && m_leftliftEnc.getPosition() < -7) {
+        else if (islvl1Called == true && m_leftliftEnc.getPosition() < -7) {
             m_leftLiftMtr.set(-0.05);
             m_rightLiftMtr.set(0.05);
+            islvl1Called = false;
+            islvl0Called = true;
         }
         else if (islvl1Called == true && (m_leftliftEnc.getPosition() > -7)) {
             //m_leftLiftMtr.set(limit.calculate(-0.3));
