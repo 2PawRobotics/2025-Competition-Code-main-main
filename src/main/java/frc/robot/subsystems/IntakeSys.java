@@ -183,19 +183,25 @@ public class IntakeSys extends SubsystemBase {
             Rintakeoutrunbwd = false;
             System.out.println("Left Intake Out & Running Back");
         }*/
-        if (Lintakeoutrun == true && m_leftIntakeEnc.getPosition() > -29) {
+        if (Lintakeoutrun == true && m_leftIntakeEnc.getPosition() < -27 && intakein == false) {
+            m_leftIntakeMtr.set(-0.05);
+            m_bottomLeftRollerMtr.set(bottomRollerSpeed);
+            m_topLeftRollerMtr.set(topRollerSpeed);
+            Lintakeoutrun = false;
+        }
+        else if (Lintakeoutrun == true && m_leftIntakeEnc.getPosition() > -27) {
             m_leftIntakeMtr.set(-0.25);
             m_bottomLeftRollerMtr.set(bottomRollerSpeed);
             m_topLeftRollerMtr.set(topRollerSpeed);
             Lintakeoutrun = false;
         }
-        else if (Lintakeoutrunbwd == true && m_leftIntakeEnc.getPosition() > -29) {
+        else if (Lintakeoutrunbwd == true && m_leftIntakeEnc.getPosition() > -27) {
             m_leftIntakeMtr.set(-0.25);
             m_bottomLeftRollerMtr.set(bottomReverseRollerSpeed);
             m_topLeftRollerMtr.set(topReverseRollerSpeed);
             Lintakeoutrunbwd = false;
         }
-        else if (Lintakeout == true && m_leftIntakeEnc.getPosition() > -29) {
+        else if (Lintakeout == true && m_leftIntakeEnc.getPosition() > -27) {
             m_leftIntakeMtr.set(-0.25);
             m_bottomLeftRollerMtr.set(0);
             m_topLeftRollerMtr.set(0);
@@ -224,13 +230,11 @@ public class IntakeSys extends SubsystemBase {
             //intakein = false;
             System.out.println("intakes in");
         }*/
-        else if (m_leftIntakeEnc.getPosition() < -29 && m_leftIntakeEnc.getPosition() > -30 && Lintakeout == true){
+        else if (m_leftIntakeEnc.getPosition() < -27 && m_leftIntakeEnc.getPosition() > -28 && Lintakeout == true){
             m_leftIntakeMtr.set(0.07);
-            m_bottomLeftRollerMtr.set(0);
-            m_topLeftRollerMtr.set(0);
             System.out.println("Reverse Intake");
         }
-        else if (m_leftIntakeEnc.getPosition() < -29 && m_leftIntakeEnc.getPosition() > -30 && intakein == true){
+        else if (m_leftIntakeEnc.getPosition() < -27 && m_leftIntakeEnc.getPosition() > -28 && intakein == true){
             Lintakeout = false;
             m_leftIntakeMtr.set(0.25);
             m_bottomLeftRollerMtr.set(0);
