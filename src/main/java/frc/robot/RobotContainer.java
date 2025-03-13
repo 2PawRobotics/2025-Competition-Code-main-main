@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.ButtonPanelConstants;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.commands.drivetrain.AlgeaoutrunCmd;
+import frc.robot.commands.drivetrain.AlgeaoutrunbwdCmd;
 import frc.robot.commands.drivetrain.ArcadeDriveCmd;
 import frc.robot.commands.drivetrain.ConveyorCmd;
 import frc.robot.commands.drivetrain.LintakeinCmd;
@@ -65,6 +67,8 @@ public class RobotContainer {
     private final RintakeoutCmd rintakeoutCmd;
     private final RintakeoutrunCmd rintakeoutrunCmd;
     private final LintakeoutrunCmd lintakeoutrunCmd;
+    private final AlgeaoutrunCmd algeaoutrunCmd;
+    private final AlgeaoutrunbwdCmd algeaoutrunbwdCmd;
 
     //Initialize auto selector.
     SendableChooser<Command> autoSelector = new SendableChooser<Command>();
@@ -89,6 +93,8 @@ public class RobotContainer {
         rintakeoutCmd = new RintakeoutCmd(intakeSys);
         rintakeoutrunCmd = new RintakeoutrunCmd(intakeSys);
         lintakeoutrunCmd = new LintakeoutrunCmd(intakeSys);
+        algeaoutrunCmd = new AlgeaoutrunCmd(intakeSys);
+        algeaoutrunbwdCmd = new AlgeaoutrunbwdCmd(intakeSys);
 
         //Add Requirements
         lvl0Cmd.addRequirements(liftSys);
@@ -102,6 +108,8 @@ public class RobotContainer {
         lintakeoutrunCmd.addRequirements(intakeSys);
         rintakeoutCmd.addRequirements(intakeSys);
         rintakeoutrunCmd.addRequirements(intakeSys);
+        algeaoutrunCmd.addRequirements(intakeSys);
+        algeaoutrunbwdCmd.addRequirements(intakeSys);
             
         //Register Commands to PathPlanner
         NamedCommands.registerCommand("lvl4", new Lvl4Cmd(liftSys));
@@ -128,6 +136,8 @@ public class RobotContainer {
         JoystickButton lvl3ReefRight = new JoystickButton(ButtonPanel,  ButtonPanelConstants.lvl3ReefRightPort);
         JoystickButton lvl2ReefRight = new JoystickButton(ButtonPanel,  ButtonPanelConstants.lvl2ReefRightPort);
         JoystickButton lvl1ReefRight = new JoystickButton(ButtonPanel,  ButtonPanelConstants.lvl1ReefRightPort);
+        JoystickButton algeaIntake = new JoystickButton(ButtonPanel, ButtonPanelConstants.lvl4ReefLeftPort);
+        JoystickButton algeaExtake = new JoystickButton(ButtonPanel, ButtonPanelConstants.lvl3ReefLeftPort);
         JoystickButton releaseCoral = new JoystickButton(ButtonPanel,  ButtonPanelConstants.releaseCoralPort);
         JoystickButton conveyorRun = new JoystickButton(ButtonPanel, ButtonPanelConstants.conveyorRunPort);
 

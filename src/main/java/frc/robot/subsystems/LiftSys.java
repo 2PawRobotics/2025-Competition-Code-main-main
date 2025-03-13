@@ -190,7 +190,8 @@ public class LiftSys extends SubsystemBase {
             System.out.println("LOWERING IN PROGRESS");    
         }*/
         else if (islvl0Called == true && (m_leftliftEnc.getPosition() < -0.3)) {
-            m_leftLiftMtr.set(0.1);
+            m_leftLiftMtr.set(0.05);
+            m_rightLiftMtr.set(-0.05);
             System.out.println("LOWERING IN PROGRESS");
         }
         /*else if (islvl0Called == true) {
