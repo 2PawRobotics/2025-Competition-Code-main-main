@@ -130,7 +130,7 @@ public class IntakeSys extends SubsystemBase {
         ) {
             Lintakeout();
         }
-        else if(
+        /*else if(
             operatorController.getRawAxis(0) > 0.95 && operatorController.getRawAxis(1) > -0.95 && operatorController.getRawAxis(1) < 0.95
         ) {
             Rintakeout();
@@ -139,7 +139,7 @@ public class IntakeSys extends SubsystemBase {
             operatorController.getRawAxis(1) < -0.95 && operatorController.getRawAxis(0) > 0.95
         ) {
             Rintakeoutrun();
-        }
+        }*/
 
         else if(
             operatorController.getRawAxis(1) > 0.95 && operatorController.getRawAxis(0) < -0.95
@@ -149,13 +149,14 @@ public class IntakeSys extends SubsystemBase {
         else if(operatorController.getRawAxis(1) < -0.95 && operatorController.getRawAxis(0) < -0.95) {
             Litnakeoutrun();
         }
-        else if(operatorController.getRawAxis(1) > 0.95 && operatorController.getRawAxis(0) > 0.95){
+        /*else if(operatorController.getRawAxis(1) > 0.95 && operatorController.getRawAxis(0) > 0.95){
             Ritnakeoutrunbwd();
-        }
-        else if(operatorController.getRawAxis(0) > 0.95 && operatorController.getRawAxis(1) < -0.95){
+        }*/
+        else if(operatorController.getRawAxis(0) == 1 && operatorController.getRawAxis(1) == -1){
             Algeaoutrun();
+            System.out.println("Algea");
         }
-        else if(operatorController.getRawAxis(1) > 0.95 && operatorController.getRawAxis(1) > 0.95){
+        else if(operatorController.getRawAxis(1) == 1 && operatorController.getRawAxis(1) == 1){
             Algeaoutrunbwd();
         }
         else if(
@@ -199,49 +200,49 @@ public class IntakeSys extends SubsystemBase {
             Rintakeoutrunbwd = false;
             System.out.println("Left Intake Out & Running Back");
         }*/
-        if (Lintakeoutrun == true && m_leftIntakeEnc.getPosition() < -27 && intakein == false) {
+        if (Lintakeoutrun == true && m_leftIntakeEnc.getPosition() < -26 && intakein == false) {
             m_leftIntakeMtr.set(-0.05);
             m_bottomLeftRollerMtr.set(bottomRollerSpeed);
             m_topLeftRollerMtr.set(topRollerSpeed);
             Lintakeoutrun = false;
         }
-        else if (Lintakeoutrun == true && m_leftIntakeEnc.getPosition() > -27) {
+        else if (Lintakeoutrun == true && m_leftIntakeEnc.getPosition() > -26) {
             m_leftIntakeMtr.set(-0.25);
             m_bottomLeftRollerMtr.set(bottomRollerSpeed);
             m_topLeftRollerMtr.set(topRollerSpeed);
             Lintakeoutrun = false;
         }
-        else if (Lintakeoutrunbwd == true && m_leftIntakeEnc.getPosition() > -27) {
+        else if (Lintakeoutrunbwd == true && m_leftIntakeEnc.getPosition() > -26) {
             m_leftIntakeMtr.set(-0.25);
             m_bottomLeftRollerMtr.set(bottomReverseRollerSpeed);
             m_topLeftRollerMtr.set(topReverseRollerSpeed);
             Lintakeoutrunbwd = false;
         }
-        else if (Lintakeout == true && m_leftIntakeEnc.getPosition() > -27) {
+        else if (Lintakeout == true && m_leftIntakeEnc.getPosition() > -26) {
             m_leftIntakeMtr.set(-0.25);
             m_bottomLeftRollerMtr.set(0);
             m_topLeftRollerMtr.set(0);
             Lintakeout = false;
         }
-        else if (Algeaoutrun == true && m_leftIntakeEnc.getPosition() < -15 && intakein == false) {
-            m_leftIntakeMtr.set(-0.05);
+        else if (Algeaoutrun == true && m_leftIntakeEnc.getPosition() < -18 && Lintakein == false) {
+            m_leftIntakeMtr.set(-0.003);
             m_bottomLeftRollerMtr.set(bottomRollerSpeed);
-            m_topLeftRollerMtr.set(topRollerSpeed);
+            m_topLeftRollerMtr.set(topReverseRollerSpeed);
             Algeaoutrun = false;
         }
-        else if (Algeaoutrun == true && m_leftIntakeEnc.getPosition() > -15) {
+        else if (Algeaoutrun == true && m_leftIntakeEnc.getPosition() > -18) {
             m_leftIntakeMtr.set(-0.25);
-            m_topLeftRollerMtr.set(0.15);
-            m_bottomLeftRollerMtr.set(0.15);
+            m_topLeftRollerMtr.set(-0.15);
+            m_bottomLeftRollerMtr.set(-0.15);
             Algeaoutrun = false;
         }
-        else if (Algeaoutrunbwd == true && m_leftIntakeEnc.getPosition() < -15 && intakein == false) {
-            m_leftIntakeMtr.set(-0.05);
+        else if (Algeaoutrunbwd == true && m_leftIntakeEnc.getPosition() < -18 && Lintakein == false) {
+            m_leftIntakeMtr.set(-0.003);
             m_bottomLeftRollerMtr.set(bottomRollerSpeed);
             m_topLeftRollerMtr.set(topRollerSpeed);
             Algeaoutrunbwd = false;
         }
-        else if (Algeaoutrunbwd == true && m_leftIntakeEnc.getPosition() > -15) {
+        else if (Algeaoutrunbwd == true && m_leftIntakeEnc.getPosition() > -18) {
             m_leftIntakeMtr.set(-0.25);
             m_bottomLeftRollerMtr.set(-0.15);
             m_topLeftRollerMtr.set(-0.15);
@@ -270,15 +271,15 @@ public class IntakeSys extends SubsystemBase {
             //intakein = false;
             System.out.println("intakes in");
         }*/
-        else if (m_leftIntakeEnc.getPosition() < -27 && m_leftIntakeEnc.getPosition() > -28 && Lintakeout == true){
+        else if (m_leftIntakeEnc.getPosition() < -26 && m_leftIntakeEnc.getPosition() > -27 && Lintakeout == true){
             m_leftIntakeMtr.set(0.07);
             System.out.println("Reverse Intake");
         }
-        else if (m_leftIntakeEnc.getPosition() < -15 && m_leftIntakeEnc.getPosition() > -16 && Algeaoutrun == true){
+        else if (m_leftIntakeEnc.getPosition() < -15 && m_leftIntakeEnc.getPosition() > -18 && Algeaoutrun == true){
             m_leftIntakeMtr.set(0.07);
             System.out.println("Reverse Intake");
         }
-        else if (m_leftIntakeEnc.getPosition() < -27 && m_leftIntakeEnc.getPosition() > -28 && intakein == true){
+        else if (m_leftIntakeEnc.getPosition() < -26 && m_leftIntakeEnc.getPosition() > -27 && intakein == true){
             Lintakeout = false;
             m_leftIntakeMtr.set(0.25);
             m_bottomLeftRollerMtr.set(0);

@@ -109,8 +109,8 @@ public class LiftSys extends SubsystemBase {
         islvl0Called = true;
     }
         
-    double rightLiftSpeed = 0.3;
-    double leftLiftSpeed = -0.3;
+    double rightLiftSpeed = 0.36;
+    double leftLiftSpeed = -0.35;
 
     @Override
     public void periodic() {
@@ -122,7 +122,7 @@ public class LiftSys extends SubsystemBase {
             m_rightLiftMtr.set(rightLiftSpeed);
         }
         else if (-masterPose < m_rightliftEnc.getPosition()){
-            m_rightLiftMtr.set(-0.1);
+            m_rightLiftMtr.set(0);
         }
         else if (islvl0Called == true && (m_rightliftEnc.getPosition() > 0.3) && islvl1Called) {
             m_rightLiftMtr.set(-0.001);
@@ -132,17 +132,17 @@ public class LiftSys extends SubsystemBase {
 
         if (DriverStation.isEnabled() == true) {
 
-        //System.out.println("Left lift encoder: " + m_leftliftEnc.getPosition());
+        System.out.println("Left lift encoder: " + m_leftliftEnc.getPosition());
         //System.out.println("Right lift encoder: " + m_rightliftEnc.getPosition());
         
         
-        if (islvl4Called && m_leftliftEnc.getPosition() < -20) {
+        if (islvl4Called && m_leftliftEnc.getPosition() < -25) {
             m_leftLiftMtr.set(-0.05);
             m_rightLiftMtr.set(0.05);
             islvl4Called = false;
             islvl0Called = true;
         }
-        else if (islvl4Called == true && (m_leftliftEnc.getPosition() > -20)) {
+        else if (islvl4Called == true && (m_leftliftEnc.getPosition() > -25)) {
             m_leftLiftMtr.set(leftLiftSpeed);
             islvl4Called = false;
             islvl0Called = true;
@@ -172,13 +172,13 @@ public class LiftSys extends SubsystemBase {
             islvl2Called = false;
             islvl0Called = true;
         }
-        else if (islvl1Called == true && m_leftliftEnc.getPosition() < -7) {
+        else if (islvl1Called == true && m_leftliftEnc.getPosition() < -9) {
             m_leftLiftMtr.set(-0.05);
             m_rightLiftMtr.set(0.05);
             islvl1Called = false;
             islvl0Called = true;
         }
-        else if (islvl1Called == true && (m_leftliftEnc.getPosition() > -7)) {
+        else if (islvl1Called == true && (m_leftliftEnc.getPosition() > -9)) {
             //m_leftLiftMtr.set(limit.calculate(-0.3));
             m_leftLiftMtr.set(leftLiftSpeed);
             System.out.println("At level 1");
@@ -189,10 +189,10 @@ public class LiftSys extends SubsystemBase {
             m_leftLiftMtr.set(0.001);
             System.out.println("LOWERING IN PROGRESS");    
         }*/
-        else if (islvl0Called == true && (m_leftliftEnc.getPosition() < -0.3)) {
-            m_leftLiftMtr.set(0.05);
-            m_rightLiftMtr.set(-0.05);
-            System.out.println("LOWERING IN PROGRESS");
+        else if (islvl0Called == true && (m_leftliftEnc.getPosition() < -0.1)) {
+            m_leftLiftMtr.set(0.1);
+            m_rightLiftMtr.set(-0.1);
+            System.out.println("LOWERING IN PROGRESS");;
         }
         /*else if (islvl0Called == true) {
             m_leftLiftMtr.set(0);
