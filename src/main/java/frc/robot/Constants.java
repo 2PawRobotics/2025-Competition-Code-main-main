@@ -29,53 +29,61 @@ public class Constants {
     public static final class CANDevices {
         // Set these CAN ID values to the those of your robot, or change your CAN ID's to match this convention.
 
+        //Pigeon
         public static final int imuId = 9;
 
+        //FL Mod
         public static final int frontLeftCanCoderId = 11;
         public static final int frontLeftSteerMtrId = 3;
         public static final int frontLeftDriveMtrId = 4;
 
+        //FR Mod
         public static final int frontRightCanCoderId = 10;
         public static final int frontRightSteerMtrId = 5;
         public static final int frontRightDriveMtrId = 6;
 
+        //BL Mod
         public static final int backLeftCanCoderId = 12;
         public static final int backLeftSteerMtrId = 1;
         public static final int backLeftDriveMtrId = 2;
 
+        //BR Mod
         public static final int backRightCanCoderId = 13;
         public static final int backRightSteerMtrId = 7;
         public static final int backRightDriveMtrId = 8;
 
-        public static final int m_rightLiftMtrId = 14;
-        public static final int m_leftLiftMtrId = 15;
+        //Rollers
+        public static final int m_topLeftRollerMtrId = 19;
+        public static final int m_bottomLeftRollerMtrId = 18;
+        public static final int m_topRightRollerMtrId = 17;
+        public static final int m_bottomRightRollerMtrId = 16;
+        public static final int m_rightIntakeMtrId = 15;
+        public static final int m_leftIntakeMtrId = 14;
 
-        //Leader Mtr is Right Mtr and Follower Mtr is Left Mtr
-        public static final int leaderRollerMtrId = 21;
-        public static final int followerRollerMtrId = 22;
+        //Lift
+        public static final int m_rightLiftMtrId = 22;
+        public static final int m_leftLiftMtrId = 21;
 
-        //Leader Mtr is Right Mtr and Follower Mtr is Left Mtr
-        public static final int rightPivotMtrId = 23;
-        public static final int leftPivotMtrId = 24;
+        //Conveyor
+        public static final int m_conveyorMtrId = 20;
 
-        //Leader Mtr is Left Mtr and Follower Mtr is Right Mtr
-        public static final int rightClimberMtrId = 25;
-        public static final int leftClimberMtrId = 26;
-
-        public static final int spacebarMtrId = 27;
+        //EndEffector
+        public static final int m_coralReleaseSevCnl = 9;
+       
     }
 
     public static final class ControllerConstants {
 
+        //Controllers
         public static final int driverGamepadPort = 0;
-
         public static final int operatorGamepadPort = 1;
-
+        
         public static final double joystickDeadband = 0.15;
 
         public static final double triggerPressedThreshhold = 0.25;
 
         public static final int driverRightJoystick = 1;
+
     }
     
     public static final class DriveConstants {
@@ -83,13 +91,13 @@ public class Constants {
          * The track width from wheel center to wheel center.
          */
         // Make sure to measure from the center of each wheel
-        public static final double trackWidth = Units.inchesToMeters(19.6875);
+        public static final double trackWidth = Units.inchesToMeters(23.75);
 
         /**
          * The track length from wheel center to wheel center.
          */
         // mature sure to measure from the center of each wheel
-        public static final double wheelBase = Units.inchesToMeters(19.6875);
+        public static final double wheelBase = Units.inchesToMeters(23.75);
 
         /**
          * The SwerveDriveKinematics used for control and odometry.
@@ -143,10 +151,10 @@ public class Constants {
         // The bolt heads should be pointing to the right. These values are subtracted from the CANCoder reading,
         // so they should be the raw CANCoder value when set straight. These values should be between 0 and 360
         // degrees.
-        public static final Rotation2d frontLeftModOffset = Rotation2d.fromDegrees(124.09); // 122.43, 318.164, 135.97
-        public static final Rotation2d frontRightModOffset = Rotation2d.fromDegrees(117.9); // 184.12, 234.756, 134.5
-        public static final Rotation2d backLeftModOffset = Rotation2d.fromDegrees(-150.01); // 62, 252.15804, -164.5
-        public static final Rotation2d backRightModOffset = Rotation2d.fromDegrees(10.36); // 82.7, 252.15804, 40.07
+        public static final Rotation2d frontLeftModOffset = Rotation2d.fromDegrees(-132.01164); // 122.43, 318.164, 135.97, 124.09, -120.23
+        public static final Rotation2d frontRightModOffset = Rotation2d.fromDegrees(-46.23048); // 184.12, 234.756, 134.5, 18.72, 87.28
+        public static final Rotation2d backLeftModOffset = Rotation2d.fromDegrees(162.94932); // 62, 252.15804, -164.5, -150.01
+        public static final Rotation2d backRightModOffset = Rotation2d.fromDegrees(-48.0762); // 82.7, 252.15804, 40.07, 14.5
 
         // You may want to change this value.
         public static final int driveCurrentLimitAmps = 70;
@@ -206,103 +214,28 @@ public class Constants {
 
     public class RollerConstants {
     
-        public static final int maxRollerCurrentAmps = 55;
+        public static final int stallLimitAmps = 25;
+        public static final int freeLimitAmps = 50;
+        public static final int maxRPM = 1;
 
-        public static final double gearRatio = 0.8;
+        //public static final double gearRatio = 5;
 
-        public static final double freeSpeedRPM = 6784.0;
-
-        public static final double maxRPM = freeSpeedRPM / gearRatio;
-
-        public static final double feedForward = 0.00018;
-
-        public static final double kP = 0.0002; // 0.0002
-
-        public static final double kD = 0.0025; // 0.003
-        
-        public static final double fireRPM = 5250.0;
-        
-        public static final double ampRPM = 900.0;
-        
-        public static final double intakeRPM = 6200.0;
-
-        public static final double rollerDiameterMeters = Units.inchesToMeters(2.0);
-
-        public static final double rollerCircumferenceMeters = rollerDiameterMeters * Math.PI;
-
-        public static final double metersPerSecondPerRPM = rollerCircumferenceMeters / 60.0;
-
-        public static final int sensorHasNoteADCThreshold = 200;
-
-        public static final double sensorTimeIntervalSecs = 0.4;
     }
 
     public class PivotConstants {
 
-        public static final int maxPivotCurrentAmps = 50;
+        public static final int stallLimitAmps = 10;
+        public static final int freeLimitAmps = 25;
+        public static final int maxRPM = 50;
 
-        public static final double gearRatio = 45.0;
+    }
 
-        public static final double kP = 0.012; // 0.035;
-        public static final double kD = 0.00025; // 0.00037;
-
-        public static final double degPerEncRev = 360.0 / gearRatio;
-        public static final double degPerSecPerRPM = 360.0 / (60.0 * gearRatio);
-
-        public static final double freeSpeedRPM = 6784.0 / gearRatio;
-
-        public static final double maxVelDegPerSec = 800.0; // 400.0;
-
-        public static final double maxAccelDegPerSecSq = 575.0; // 575.0;
-
-        public static final double maxManualDegPerSec = 180.0;
-
-        public static final double maxManualDegPerSecSq = 375.0;
-
-        public static final double trapPresetDeg = 150.0;
-
-        public static final double ampPresetDeg = 67.0;
+    public class LiftConstants {
         
-        public static final double sourcePresetDeg = 68.0;
+        public static final int stallLimitAmps = 100;
+        public static final int freeLimitAmps = 50;
+        public static final int maxRPM = 100;
 
-        public static final double groundPresetDeg = 183.0;
-
-        public static final double homePresetDeg = 0.0;
-
-        public static final double podiumPresetDeg = 82.4;
-
-        public static final float lowerLimitDeg = 0f;
-
-        public static final float upperLimitDeg = 181f;
-
-        public static final double podiumCorrectionIncrementDeg = .01;
-
-        public static final double toleranceDeg = 0.5;
-
-        public static final double absPivotEncOffsetDeg = 208.0 - 60.0;
-
-        /*
-         Used to calculate the approximate time of flight of the note.
-         */
-        public static final double pivotHeightMeters = Units.inchesToMeters(10.5);
-
-        /*
-         Takes distance to speaker in meters as the key and pivot angle in degrees as the value.
-         */
-        public static final InterpolatingDoubleTreeMap pivotDegSpeakerShotInterpolator = constructPivotInterpolator();
-        
-        private static InterpolatingDoubleTreeMap constructPivotInterpolator() {
-            InterpolatingDoubleTreeMap pivotInterpolator = new InterpolatingDoubleTreeMap();
-
-            // data points with coordinate (lateral distance to speaker [meters], pivot angle [degrees])
-            pivotInterpolator.put(1.23, 59.0 - 2.0);
-            pivotInterpolator.put(2.24, 79.7 - 2.0);
-            pivotInterpolator.put(2.77, 84.0 - 3.0);
-            pivotInterpolator.put(3.12, podiumPresetDeg);
-            // pivotInterpolator.put(3.5, 77.0);
-
-            return pivotInterpolator;
-        }
     }
 
     public class ClimberConstants {

@@ -21,7 +21,6 @@ public class Lvl2Cmd extends Command {
        @Override
        public void execute() {
            liftSys.lvl2();
-           System.out.println("At Level 2");
        }
    
        // Called once the command ends or is interrupted.

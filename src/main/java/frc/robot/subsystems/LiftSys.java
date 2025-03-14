@@ -1,15 +1,24 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import com.ctre.phoenix6.signals.ControlModeValue;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import frc.robot.RobotContainer;
-import frc.robot.Constants.ButtonPanelConstants;
 import frc.robot.Constants.CANDevices;
-import frc.robot.Constants.ControllerConstants;
+import frc.robot.Constants.LiftConstants;
+
 
 public class LiftSys extends SubsystemBase {
     
@@ -19,11 +28,45 @@ public class LiftSys extends SubsystemBase {
     RelativeEncoder m_leftliftEnc = m_leftLiftMtr.getEncoder();
     RelativeEncoder m_rightliftEnc = m_rightLiftMtr.getEncoder();
 
+    double masterPose = m_leftliftEnc.getPosition();
+    double slavePose = m_rightliftEnc.getPosition();
+
     private boolean islvl4Called = false;
     private boolean islvl3Called = false;
     private boolean islvl2Called = false;
     private boolean islvl1Called = false;
     private boolean islvl0Called = false;
+
+    //private final SlewRateLimiter limit;
+
+    public LiftSys() {
+
+    
+        SparkMaxConfig rightConfig = new SparkMaxConfig();
+        SparkMaxConfig leftConfig = new SparkMaxConfig();
+
+        //limit = new SlewRateLimiter(2);
+
+        m_leftliftEnc.setPosition(0);
+        m_rightliftEnc.setPosition(0);
+
+        leftConfig.idleMode(IdleMode.kBrake);
+        leftConfig.closedLoop.pid(0,0.00025,0);
+        //leftConfig.encoder.inverted(true);
+
+        rightConfig.idleMode(IdleMode.kBrake);
+        rightConfig.closedLoop.pid(0,0.00025,0);
+        
+
+        m_leftLiftMtr.configure(leftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        m_rightLiftMtr.configure(rightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+        //m_leftLiftMtr.configureAsync(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        //m_rightLiftMtr.configureAsync(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+        
+
+    }
 
     public boolean islvl4Called() {
         return islvl4Called = true;
@@ -44,6 +87,7 @@ public class LiftSys extends SubsystemBase {
     public boolean islvl0Called() {
         return islvl0Called = true;
     }
+        
 
     public void lvl4() {
         islvl4Called = true;
@@ -64,95 +108,142 @@ public class LiftSys extends SubsystemBase {
     public void lvl0() {
         islvl0Called = true;
     }
+        
+    double rightLiftSpeed = 0.36;
+    double leftLiftSpeed = -0.35;
 
     @Override
     public void periodic() {
-       // System.out.println("periodicisrunning");
-        if(
-            RobotContainer.ButtonPanel.getRawButtonPressed(ButtonPanelConstants.lvl4ReefRightPort)
-            ) {
-            lvl4();
-        }
-        else if(
-            RobotContainer.ButtonPanel.getRawButton(ButtonPanelConstants.lvl3ReefRightPort)
-            ) {
-            lvl3();
-        }
-        else if(
-            RobotContainer.ButtonPanel.getRawButtonPressed(ButtonPanelConstants.lvl2ReefRightPort)
-            ) {
-            lvl2();
-            }
-        else if(
-            RobotContainer.ButtonPanel.getRawButtonPressed(ButtonPanelConstants.lvl1ReefRightPort)
-            ) {
-            lvl1();
-            }
-        else{
-            lvl0();
-        }
-    } 
-    public LiftSys() {
 
-        m_leftliftEnc.setPosition(0);
-        m_rightliftEnc.setPosition(0);
+        double masterPose = m_leftliftEnc.getPosition();
 
-        if(
-            islvl4Called = true
-        ){
-            m_leftliftEnc.setPosition(400);
-            m_rightliftEnc.setPosition(400);
+        if (-masterPose > m_rightliftEnc.getPosition()){
+            //m_rightLiftMtr.set(limit.calculate(0.325));
+            m_rightLiftMtr.set(rightLiftSpeed);
+        }
+        else if (-masterPose < m_rightliftEnc.getPosition()){
+            m_rightLiftMtr.set(0);
+        }
+        else if (islvl0Called == true && (m_rightliftEnc.getPosition() > 0.3) && islvl1Called) {
+            m_rightLiftMtr.set(-0.001);
+        }
+        
+        
+
+        if (DriverStation.isEnabled() == true) {
+
+        System.out.println("Left lift encoder: " + m_leftliftEnc.getPosition());
+        //System.out.println("Right lift encoder: " + m_rightliftEnc.getPosition());
+        
+        
+        if (islvl4Called && m_leftliftEnc.getPosition() < -25) {
+            m_leftLiftMtr.set(-0.05);
+            m_rightLiftMtr.set(0.05);
+            islvl4Called = false;
+            islvl0Called = true;
+        }
+        else if (islvl4Called == true && (m_leftliftEnc.getPosition() > -25)) {
+            m_leftLiftMtr.set(leftLiftSpeed);
+            islvl4Called = false;
+            islvl0Called = true;
             System.out.println("At level 4");
         }
-        else if (
-            islvl3Called = true
-        ){
-            m_leftliftEnc.setPosition(300);
-            m_rightliftEnc.setPosition(300);
+        else if (islvl3Called && m_leftliftEnc.getPosition() < -15) {
+            m_leftLiftMtr.set(-0.05);
+            m_rightLiftMtr.set(0.05);
+            islvl3Called = false;
+            islvl0Called = true;
+        }
+        else if (islvl3Called == true && (m_leftliftEnc.getPosition() > -15)) {
+            m_leftLiftMtr.set(leftLiftSpeed);
+            islvl3Called = false;
+            islvl0Called = true;
             System.out.println("At level 3");
         }
-        else if (
-            islvl2Called = true
-        ) {
-            m_leftliftEnc.setPosition(200);
-            m_rightliftEnc.setPosition(200);
+        else if (islvl2Called && m_leftliftEnc.getPosition() < -10) {
+            m_leftLiftMtr.set(-0.05);
+            m_rightLiftMtr.set(0.05);
+            islvl2Called = false;
+            islvl0Called = true;
+        }
+        else if (islvl2Called == true && (m_leftliftEnc.getPosition() > -10)) {
+            m_leftLiftMtr.set(leftLiftSpeed);
             System.out.println("At level 2");
+            islvl2Called = false;
+            islvl0Called = true;
         }
-        else if (
-            islvl1Called = true
-        ) {
-            m_leftliftEnc.setPosition(100);
-            m_rightliftEnc.setPosition(100);
+        else if (islvl1Called == true && m_leftliftEnc.getPosition() < -9) {
+            m_leftLiftMtr.set(-0.05);
+            m_rightLiftMtr.set(0.05);
+            islvl1Called = false;
+            islvl0Called = true;
+        }
+        else if (islvl1Called == true && (m_leftliftEnc.getPosition() > -9)) {
+            //m_leftLiftMtr.set(limit.calculate(-0.3));
+            m_leftLiftMtr.set(leftLiftSpeed);
             System.out.println("At level 1");
+            islvl1Called = false;
+            islvl0Called = true;
         }
-        else{
-            m_leftliftEnc.setPosition(0);
-            m_rightliftEnc.setPosition(0);
+        /*else if (islvl0Called == true && (m_leftliftEnc.getPosition() < -0.3) && islvl1Called) {
+            m_leftLiftMtr.set(0.001);
+            System.out.println("LOWERING IN PROGRESS");    
+        }*/
+        else if (islvl0Called == true && (m_leftliftEnc.getPosition() < -0.1)) {
+            m_leftLiftMtr.set(0.1);
+            m_rightLiftMtr.set(-0.1);
+            System.out.println("LOWERING IN PROGRESS");;
+        }
+        /*else if (islvl0Called == true) {
+            m_leftLiftMtr.set(0);
+            m_rightLiftMtr.set(0);
             System.out.println("At level 0");
+        }*/
+        else {
+            m_leftLiftMtr.set(0);
+            m_rightLiftMtr.set(0);
         }
-
-        if(
-            RobotContainer.ButtonPanel.getRawButton(ButtonPanelConstants.lvl4ReefRightPort)
-            ) {
-            lvl4();
-        }
-        else if(
-            RobotContainer.ButtonPanel.getRawButton(ButtonPanelConstants.lvl3ReefRightPort)
-            ) {
-            lvl3();
-        }
-        else if(
-            RobotContainer.ButtonPanel.getRawButtonPressed(ButtonPanelConstants.lvl2ReefRightPort)
-            ) {
-            lvl2();
+        /*if (islvl1Called == true) {
+            if (m_leftliftEnc.getPosition() > m_rightliftEnc.getPosition()){
+                m_rightLiftMtr.set(-0.2);
             }
-        else if(
-            RobotContainer.ButtonPanel.getRawButtonPressed(ButtonPanelConstants.lvl1ReefRightPort)
-            ) {
-            lvl1();
+            if (m_leftliftEnc.getPosition() < m_rightliftEnc.getPosition()){
+                m_rightLiftMtr.set(0.2);
             }
-        else{
-            lvl0();
+        } 
+        else if (islvl2Called == true) {
+            if (m_leftliftEnc.getPosition() > m_rightliftEnc.getPosition()){
+                m_rightLiftMtr.set(-0.2);
+            }
+            else if (m_leftliftEnc.getPosition() < m_rightliftEnc.getPosition()){
+                m_rightLiftMtr.set(0.2);
+            }
         }
+        else if (islvl3Called == true) {
+            if (m_leftliftEnc.getPosition() > m_rightliftEnc.getPosition()){
+                m_rightLiftMtr.set(-0.2);
+            }
+            else if (m_leftliftEnc.getPosition() < m_rightliftEnc.getPosition()){
+                m_rightLiftMtr.set(0.2);
+            }
+        } 
+        else if (islvl4Called == true) {
+            if (m_leftliftEnc.getPosition() > m_rightliftEnc.getPosition()){
+                m_rightLiftMtr.set(-0.2);
+            }
+            else if (m_leftliftEnc.getPosition() < m_rightliftEnc.getPosition()){
+                m_rightLiftMtr.set(0.2);
+            }
+        else {
+            islvl0Called = true;
+            islvl1Called = false;
+            islvl2Called = false;
+            islvl3Called = false;
+            islvl4Called = false;
+        }
+        } */
     }
+    } 
+
+
 }

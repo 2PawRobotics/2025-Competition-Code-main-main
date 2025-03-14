@@ -1,26 +1,16 @@
 package frc.robot.subsystems;
 
-//import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
-    //import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.hardware.CANcoder;
-//import com.ctre.phoenix6.configs.MagnetSensorConfigs.AbsoluteSensorDiscontinuityPoint;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
-//import com.revrobotics.CANSparkFlex;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.RelativeEncoder;
-//import com.revrobotics.SparkPIDController;
 import com.revrobotics.spark.SparkClosedLoopController;
-//import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
-//import com.revrobotics.CANSparkBase.IdleMode;
-    //import com.revrobotics.spark.SparkBase;
-//import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-    //import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 
@@ -63,24 +53,13 @@ public class SwerveModule extends SubsystemBase {
         driveMtr = new SparkFlex(driveMtrId, MotorType.kBrushless);
         steerMtr = new SparkFlex(steerMtrId, MotorType.kBrushless);
 
-        //steerMtr.setInverted(true);
-
         driveEnc = driveMtr.getEncoder();
         steerEnc = steerMtr.getEncoder();
 
         canCoder = new CANcoder(canCoderId);
 
-        //driveMtr.setIdleMode(IdleMode.kBrake);
-        //steerMtr.setIdleMode(IdleMode.kCoast);
-
-        //driveMtr.setSmartCurrentLimit(DriveConstants.driveCurrentLimitAmps);
-
         steerController = steerMtr.getClosedLoopController();
         driveController = driveMtr.getClosedLoopController();
-
-        //com.revrobotics.spark.SparkBase.SparkBaseConfig driveConfig = new com.revrobotics.spark.SparkBase.SparkBaseConfig();
-        //SparkBaseConfig driveConfig = new SparkFlexConfig();
-
 
         SparkFlexConfig driveConfig = new SparkFlexConfig();
         driveConfig 
@@ -96,27 +75,16 @@ public class SwerveModule extends SubsystemBase {
 
         SparkFlexConfig steerConfig = new SparkFlexConfig();
         steerConfig 
-            .inverted(false)
+            .inverted(true)
             .idleMode(IdleMode.kCoast);
         steerConfig.encoder
             .positionConversionFactor(DriveConstants.steerRadiansPerEncRev);
-            //.velocityConversionFactor(0)
         steerConfig.closedLoop
             .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
             .pid(DriveConstants.steerkP, 0, DriveConstants.steerkD);
 
         driveMtr.configure(driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         steerMtr.configure(steerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
-        //configure the CANCoder to output in unsigned (wrap around from sensor value 1 to 0) and CCW positive
-        // Make sure the CANcoders actually read CCW positive (when viewing from above), otherwise you will
-        // have to configure it as CW positive. This is either a hardware problem just on 6081 or a Phoenix 6 bug.
-        /*canCoder.getConfigurator().apply(
-            new CANcoderConfiguration()
-                .withMagnetSensor(
-                    new MagnetSensorConfigs().withAbsoluteSensorRange(AbsoluteSensorDiscontinuityPoint.Unsigned_0To1)
-                .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive)
-        ));*/
 
         CANcoderConfiguration ccConfig = new CANcoderConfiguration();
         ccConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
@@ -237,12 +205,6 @@ public class SwerveModule extends SubsystemBase {
             driveMtr.set(desiredState.speedMetersPerSecond / DriveConstants.freeMetersPerSecond);
         }
         else {
-            /*driveController.setReference(
-                desiredState.speedMetersPerSecond,
-                ControlType.kVelocity,
-                0, 
-                DriveConstants.driveFF.calculate(desiredState.speedMetersPerSecond)
-            );*/
             driveController.setReference(0.0,ControlType.kPosition);
         }
     }

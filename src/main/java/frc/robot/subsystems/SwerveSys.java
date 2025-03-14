@@ -110,12 +110,6 @@ public class SwerveSys extends SubsystemBase {
     // Takes in kinematics and robot angle for parameters
 
     private final SwerveDrivePoseEstimator poseEstimator = 
-        // new SwerveDrivePoseEstimator(
-        //     DriveConstants.kinematics,
-        //     imu.getRotation2d(),
-        //     getModulePositions(),
-        //     new Pose2d()
-        // );
         new SwerveDrivePoseEstimator(
             DriveConstants.kinematics,
             imu.getRotation2d(),
@@ -193,7 +187,7 @@ public class SwerveSys extends SubsystemBase {
         // Updates the odometry every 20ms
         poseEstimator.update(imu.getRotation2d(), getModulePositions());
 
-        for(LimelightPoseEstimator limelightPoseEstimator : limelightPoseEstimators) {
+        /*for(LimelightPoseEstimator limelightPoseEstimator : limelightPoseEstimators) {
             Optional<Pose2d> limelightPose = limelightPoseEstimator.getRobotPose();
             if(limelightPose.isPresent()) {
                 poseEstimator.addVisionMeasurement(limelightPose.get(), limelightPoseEstimator.getCaptureTimestamp());
@@ -203,7 +197,7 @@ public class SwerveSys extends SubsystemBase {
                 //System.out.println("ta is: " + ta.getDouble(0.20)); 
                 //System.out.println("Hello World");
             }
-        }
+        }*/
     //read values periodically
     double x = tx.getDouble(0.0);
     double y = ty.getDouble(0.0);
