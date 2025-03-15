@@ -2,6 +2,9 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -73,8 +76,14 @@ public class RobotContainer {
     //Initialize auto selector.
     SendableChooser<Command> autoSelector = new SendableChooser<Command>();
 
+    private UsbCamera camera;
+
     public RobotContainer() {
         RobotController.setBrownoutVoltage(DriveConstants.brownoutVoltage);
+
+        camera = new UsbCamera("driver camera", 2);
+        
+        CameraServer.startAutomaticCapture(camera);
 
         // Build an auto chooser. This will use Commands.none() as the default option.
         autoSelector = AutoBuilder.buildAutoChooser();

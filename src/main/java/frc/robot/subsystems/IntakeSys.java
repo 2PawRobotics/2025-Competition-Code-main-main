@@ -117,10 +117,10 @@ public class IntakeSys extends SubsystemBase {
         
     }
 
-    double topRollerSpeed = -0.5;
-    double bottomRollerSpeed = -0.7;
-    double topReverseRollerSpeed = 0.5;
-    double bottomReverseRollerSpeed = 0.7;
+    double topRollerSpeed = -0.6;
+    double bottomRollerSpeed = -0.8;
+    double topReverseRollerSpeed = 0.6;
+    double bottomReverseRollerSpeed = 0.8;
 
     @Override
     public void periodic() {
