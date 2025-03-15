@@ -451,6 +451,13 @@ public class SwerveSys extends SubsystemBase {
         );
     }
 
+    public void printCanCoderAbsolutePositions() {
+        System.out.println("Front Left Absolute: " + frontLeftMod.getCanCoderAngle().getDegrees());
+        System.out.println("Front Right Absolute: " + frontRightMod.getCanCoderAngle().getDegrees());
+        System.out.println("Back Left Absolute: " + backLeftMod.getCanCoderAngle().getDegrees());
+        System.out.println("Back Right Absolute: " + backRightMod.getCanCoderAngle().getDegrees());
+    }
+
     public double getAverageDriveVoltage() {
         return (
             (Math.abs(frontLeftMod.getDriveVoltage())
@@ -541,4 +548,6 @@ public class SwerveSys extends SubsystemBase {
         backLeftMod.setDriveCurrentLimit(amps);
         backRightMod.setDriveCurrentLimit(amps);
     }*/
+
+    // Add this method to SwerveSys.java
 }

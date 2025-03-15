@@ -178,6 +178,9 @@ public class RobotContainer {
         driverController.b().whileTrue(new TurnToHeadingCmd(Rotation2d.fromDegrees(120), swerveSys));
         driverController.x().whileTrue(new TurnToHeadingCmd(Rotation2d.fromDegrees(90), swerveSys));
 
+        // Add this line to print CANCoder values when pressing back button
+        driverController.back().onTrue(Commands.runOnce(() -> swerveSys.printCanCoderAbsolutePositions()));
+
     }
 
     public Command getAutonomousCommand() {
@@ -195,20 +198,20 @@ public class RobotContainer {
 
         SmartDashboard.putNumber("blue pose x meters", swerveSys.getBlueSidePose().getX());
 
-        SmartDashboard.putNumber("FL angle degrees", swerveSys.getModuleStates()[0].angle.getDegrees());
-        SmartDashboard.putNumber("FR angle degrees", swerveSys.getModuleStates()[1].angle.getDegrees());
-        SmartDashboard.putNumber("BL angle degrees", swerveSys.getModuleStates()[2].angle.getDegrees());
-        SmartDashboard.putNumber("BR angle degrees", swerveSys.getModuleStates()[3].angle.getDegrees());
+        SmartDashboard.putNumber("FL MODSTATE angle degrees", swerveSys.getModuleStates()[0].angle.getDegrees());
+        SmartDashboard.putNumber("FR MODSTATE angle degrees", swerveSys.getModuleStates()[1].angle.getDegrees());
+        SmartDashboard.putNumber("BL MODSTATE angle degrees", swerveSys.getModuleStates()[2].angle.getDegrees());
+        SmartDashboard.putNumber("BR MODSTATE angle degrees", swerveSys.getModuleStates()[3].angle.getDegrees());
 
-        SmartDashboard.putNumber("FL raw CANCoder degrees", swerveSys.getCanCoderAngles()[0].getDegrees());
-        SmartDashboard.putNumber("FR raw CANCoder degrees", swerveSys.getCanCoderAngles()[1].getDegrees());
-        SmartDashboard.putNumber("BL raw CANCoder degrees", swerveSys.getCanCoderAngles()[2].getDegrees());
-        SmartDashboard.putNumber("BR raw CANCoder degrees", swerveSys.getCanCoderAngles()[3].getDegrees());
+        SmartDashboard.putNumber("FL RAW CANCoder degrees", swerveSys.getCanCoderAngles()[0].getDegrees());
+        SmartDashboard.putNumber("FR RAW CANCoder degrees", swerveSys.getCanCoderAngles()[1].getDegrees());
+        SmartDashboard.putNumber("BL RAW CANCoder degrees", swerveSys.getCanCoderAngles()[2].getDegrees());
+        SmartDashboard.putNumber("BR RAW CANCoder degrees", swerveSys.getCanCoderAngles()[3].getDegrees());
 
-        SmartDashboard.putNumber("FL offset CANCoder degrees", swerveSys.getCanCoderAngles()[0].getDegrees() - DriveConstants.frontLeftModOffset.getDegrees());
-        SmartDashboard.putNumber("FR offset CANCoder degrees", swerveSys.getCanCoderAngles()[1].getDegrees() - DriveConstants.frontRightModOffset.getDegrees());
-        SmartDashboard.putNumber("BL offset CANCoder degrees", swerveSys.getCanCoderAngles()[2].getDegrees() - DriveConstants.backLeftModOffset.getDegrees());
-        SmartDashboard.putNumber("BR offset CANCoder degrees", swerveSys.getCanCoderAngles()[3].getDegrees() - DriveConstants.backRightModOffset.getDegrees());
+        SmartDashboard.putNumber("FL OFFSET CANCoder degrees", swerveSys.getCanCoderAngles()[0].getDegrees() - DriveConstants.frontLeftModOffset.getDegrees());
+        SmartDashboard.putNumber("FR OFFSET CANCoder degrees", swerveSys.getCanCoderAngles()[1].getDegrees() - DriveConstants.frontRightModOffset.getDegrees());
+        SmartDashboard.putNumber("BL OFFSET CANCoder degrees", swerveSys.getCanCoderAngles()[2].getDegrees() - DriveConstants.backLeftModOffset.getDegrees());
+        SmartDashboard.putNumber("BR OFFSET CANCoder degrees", swerveSys.getCanCoderAngles()[3].getDegrees() - DriveConstants.backRightModOffset.getDegrees());
 
         SmartDashboard.putNumber("drive voltage", swerveSys.getAverageDriveVoltage());
 
