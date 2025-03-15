@@ -82,8 +82,8 @@ public class ArcadeDriveCmd extends Command {
         }
 
         swerveSys.drive(
-            -drive * DriveConstants.maxDriveSpeedMetersPerSec,
-            -strafe * DriveConstants.maxDriveSpeedMetersPerSec,
+            drive * DriveConstants.maxDriveSpeedMetersPerSec,
+            strafe * DriveConstants.maxDriveSpeedMetersPerSec,
             -rot * DriveConstants.maxTurnSpeedRadPerSec,
             isFieldRelative
         );
