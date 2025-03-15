@@ -51,7 +51,7 @@ public class LiftSys extends SubsystemBase {
         m_rightliftEnc.setPosition(0);
 
         leftConfig.idleMode(IdleMode.kBrake);
-        leftConfig.closedLoop.pid(0,0.00025,0);
+        leftConfig.closedLoop.pid(0,0,0);
         //leftConfig.encoder.inverted(true);
 
         rightConfig.idleMode(IdleMode.kBrake);
@@ -109,8 +109,8 @@ public class LiftSys extends SubsystemBase {
         islvl0Called = true;
     }
         
-    double rightLiftSpeed = 0.36;
-    double leftLiftSpeed = -0.35;
+    double rightLiftSpeed = 0.3325;
+    double leftLiftSpeed = -0.32;
 
     @Override
     public void periodic() {
@@ -190,8 +190,8 @@ public class LiftSys extends SubsystemBase {
             System.out.println("LOWERING IN PROGRESS");    
         }*/
         else if (islvl0Called == true && (m_leftliftEnc.getPosition() < -0.1)) {
-            m_leftLiftMtr.set(0.1);
-            m_rightLiftMtr.set(-0.1);
+            m_leftLiftMtr.set(0.05);
+            m_rightLiftMtr.set(-0.05);
             System.out.println("LOWERING IN PROGRESS");;
         }
         /*else if (islvl0Called == true) {

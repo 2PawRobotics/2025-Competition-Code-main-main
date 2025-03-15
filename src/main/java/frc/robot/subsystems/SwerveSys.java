@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.Constants.CANDevices;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.VisionConstants;
+/*import frc.robot.Constants.VisionConstants;*/
 import frc.robot.util.limelight.LimelightPoseEstimator;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTable;
@@ -118,10 +118,10 @@ public class SwerveSys extends SubsystemBase {
             VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(0.25)),
             VecBuilder.fill(0.35, 0.35, Units.degreesToRadians(30.0)));
 
-    private final LimelightPoseEstimator[] limelightPoseEstimators = new LimelightPoseEstimator[] {
+    /*private final LimelightPoseEstimator[] limelightPoseEstimators = new LimelightPoseEstimator[] {
         new LimelightPoseEstimator(VisionConstants.frontLimelightName),
         new LimelightPoseEstimator(VisionConstants.backLimelightName)
-    };
+    };*/
 
     public void resetPPPose(Pose2d pose) {
         setPose(pose);
