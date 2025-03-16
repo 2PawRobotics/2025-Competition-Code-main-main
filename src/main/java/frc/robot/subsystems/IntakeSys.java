@@ -18,7 +18,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
 public class IntakeSys extends SubsystemBase {
-    public final static CommandXboxController operatorController = new CommandXboxController(ControllerConstants.operatorGamepadPort);
+    /*public final static CommandXboxController operatorController = new CommandXboxController(ControllerConstants.operatorGamepadPort);
 
     public static SparkMax m_leftIntakeMtr = new SparkMax(CANDevices.m_rightIntakeMtrId, MotorType.kBrushless);
     //public static SparkMax m_rightIntakeMtr = new SparkMax(CANDevices.m_leftIntakeMtrId, MotorType.kBrushed);
@@ -27,8 +27,8 @@ public class IntakeSys extends SubsystemBase {
     public static SparkMax m_topLeftRollerMtr = new SparkMax(CANDevices.m_topLeftRollerMtrId, MotorType.kBrushed);
     public static SparkMax m_bottomLeftRollerMtr = new SparkMax(CANDevices.m_bottomLeftRollerMtrId, MotorType.kBrushed);
 
-    /*public static RelativeEncoder m_rightIntakeEnc = m_rightIntakeMtr.getEncoder();
-    public static RelativeEncoder m_leftIntakeEnc = m_leftIntakeMtr.getEncoder();*/
+    //public static RelativeEncoder m_rightIntakeEnc = m_rightIntakeMtr.getEncoder();
+    //public static RelativeEncoder m_leftIntakeEnc = m_leftIntakeMtr.getEncoder();
 
     RelativeEncoder m_rightIntakeEnc;
     RelativeEncoder m_leftIntakeEnc;
@@ -99,7 +99,7 @@ public class IntakeSys extends SubsystemBase {
         //m_rightIntakeMtr.configure(intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         m_leftIntakeMtr.configure(intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-        /*rollerConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(
+        rollerConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(
         25, 
         50, 
         10);
@@ -108,19 +108,19 @@ public class IntakeSys extends SubsystemBase {
         m_topRightRollerMtr.configure(rollerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         m_bottomLeftRollerMtr.configure(rollerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         m_bottomRightRollerMtr.configure(rollerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        */
         
-        //m_rightIntakeEnc = m_rightIntakeMtr.getEncoder();
+        
+        m_rightIntakeEnc = m_rightIntakeMtr.getEncoder();
         m_leftIntakeEnc = m_leftIntakeMtr.getEncoder();
 
         m_leftIntakeEnc.setPosition(0);
         
     }
 
-    double topRollerSpeed = -0.6;
-    double bottomRollerSpeed = -0.8;
-    double topReverseRollerSpeed = 0.6;
-    double bottomReverseRollerSpeed = 0.8;
+    double topRollerSpeed = -0.8;
+    double bottomRollerSpeed = -1;
+    double topReverseRollerSpeed = 0.8;
+    double bottomReverseRollerSpeed = 1;
 
     @Override
     public void periodic() {
@@ -130,7 +130,7 @@ public class IntakeSys extends SubsystemBase {
         ) {
             Lintakeout();
         }
-        /*else if(
+        else if(
             operatorController.getRawAxis(0) > 0.95 && operatorController.getRawAxis(1) > -0.95 && operatorController.getRawAxis(1) < 0.95
         ) {
             Rintakeout();
@@ -139,7 +139,7 @@ public class IntakeSys extends SubsystemBase {
             operatorController.getRawAxis(1) < -0.95 && operatorController.getRawAxis(0) > 0.95
         ) {
             Rintakeoutrun();
-        }*/
+        }
 
         else if(
             operatorController.getRawAxis(1) > 0.95 && operatorController.getRawAxis(0) < -0.95
@@ -149,9 +149,9 @@ public class IntakeSys extends SubsystemBase {
         else if(operatorController.getRawAxis(1) < -0.95 && operatorController.getRawAxis(0) < -0.95) {
             Litnakeoutrun();
         }
-        /*else if(operatorController.getRawAxis(1) > 0.95 && operatorController.getRawAxis(0) > 0.95){
+        else if(operatorController.getRawAxis(1) > 0.95 && operatorController.getRawAxis(0) > 0.95){
             Ritnakeoutrunbwd();
-        }*/
+        }
         else if(operatorController.getRawAxis(0) == 1 && operatorController.getRawAxis(1) == -1){
             Algeaoutrun();
             System.out.println("Algea");
@@ -170,7 +170,7 @@ public class IntakeSys extends SubsystemBase {
             Lintakein();
         }
     }
-        /*if (Rintakeout == true) {
+        if (Rintakeout == true) {
             m_rightIntakeMtr.set(0.6);
             Rintakeout = false;
             System.out.println("R Intake Out");
@@ -179,27 +179,27 @@ public class IntakeSys extends SubsystemBase {
             m_rightIntakeMtr.set(0);
             //Rintakein = false;
             System.out.println("R Intake In");
-        }*/
-        /*if (Lintakein == true && m_leftIntakeEnc.getPosition() < 0) {
+        }
+        if (Lintakein == true && m_leftIntakeEnc.getPosition() < 0) {
             //m_leftIntakeMtr.set(0);
             //Lintakein = false;
             //System.out.println("L Intake In");
             m_leftIntakeMtr.set(0.5);
-        }*/
+        }
         /*else if (Rintakeoutrun == true){
             m_rightIntakeMtr.set(0.6);
             m_bottomRightRollerMtr.set(rollerSpeed);
             m_topRightRollerMtr.set(rollerSpeed);
             Rintakeoutrun = false;
             System.out.println("Right Intake Out and Running");
-        }*/
+        }
         /*else if (Rintakeoutrunbwd == true){
             m_rightIntakeMtr.set(0.6);
             m_bottomRightRollerMtr.set(reverseRollerSpeed);
             m_topRightRollerMtr.set(reverseRollerSpeed);
             Rintakeoutrunbwd = false;
             System.out.println("Left Intake Out & Running Back");
-        }*/
+        }
         if (Lintakeoutrun == true && m_leftIntakeEnc.getPosition() < -26 && intakein == false) {
             m_leftIntakeMtr.set(-0.05);
             m_bottomLeftRollerMtr.set(bottomRollerSpeed);
@@ -270,7 +270,7 @@ public class IntakeSys extends SubsystemBase {
             m_bottomRightRollerMtr.set(0);
             //intakein = false;
             System.out.println("intakes in");
-        }*/
+        }
         else if (m_leftIntakeEnc.getPosition() < -26 && m_leftIntakeEnc.getPosition() > -27 && Lintakeout == true){
             m_leftIntakeMtr.set(0.07);
             System.out.println("Reverse Intake");
@@ -292,5 +292,5 @@ public class IntakeSys extends SubsystemBase {
             m_topLeftRollerMtr.set(0);
         }
     }
-
+*/
 }

@@ -17,10 +17,10 @@ public class AlgeaoutrunCmd extends Command {
     }
 
     // Called every time the scheduler runs while the command is scheduled.
-    @Override
+   /*  @Override
     public void execute() {
         intakeSys.Algeaoutrun();
-    }
+    }*/
 
     // Called once the command ends or is interrupted.
     @Override

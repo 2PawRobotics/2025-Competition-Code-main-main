@@ -75,8 +75,9 @@ public class ArcadeDriveCmd extends Command {
             double theta = Math.atan2(drive, strafe);
             double r = Math.pow(Math.hypot(drive, strafe), 2.0);
 
-            drive = r * Math.sin(theta);
-            strafe = r * Math.cos(theta);
+            // Red Alliance positive. Blue Alliance negative.
+            drive = -r * Math.sin(theta);
+            strafe = -r * Math.cos(theta);
 
             rot = Math.copySign(Math.pow(rot, 2.0), rot);
         }

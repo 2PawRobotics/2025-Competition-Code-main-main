@@ -17,10 +17,10 @@ public class LintakeoutrunCmd extends Command {
     }
 
     // Called every time the scheduler runs while the command is scheduled.
-    @Override
+    /*@Override
     public void execute() {
         intakeSys.Litnakeoutrun();
-    }
+    }*/
 
     // Called once the command ends or is interrupted.
     @Override
