@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.Constants.CANDevices;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.RobotContainer;
 /*import frc.robot.Constants.VisionConstants;*/
 import frc.robot.util.limelight.LimelightPoseEstimator;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -187,6 +188,12 @@ public class SwerveSys extends SubsystemBase {
         // Updates the odometry every 20ms
         poseEstimator.update(imu.getRotation2d(), getModulePositions());
 
+        if(RobotContainer.driverController.rightBumper().getAsBoolean() == true) {
+            setSpeedFactor(0.3);
+        }
+        else {
+            setSpeedFactor(1.0);
+        }
         /*for(LimelightPoseEstimator limelightPoseEstimator : limelightPoseEstimators) {
             Optional<Pose2d> limelightPose = limelightPoseEstimator.getRobotPose();
             if(limelightPose.isPresent()) {

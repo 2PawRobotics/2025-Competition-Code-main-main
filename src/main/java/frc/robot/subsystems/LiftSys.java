@@ -22,14 +22,13 @@ import frc.robot.Constants.LiftConstants;
 
 public class LiftSys extends SubsystemBase {
     
-    public static SparkMax m_leftLiftMtr = new SparkMax(CANDevices.m_leftLiftMtrId, MotorType.kBrushless);
-    public static SparkMax m_rightLiftMtr = new SparkMax(CANDevices.m_rightLiftMtrId, MotorType.kBrushless);
+    public static SparkMax m_liftMtr = new SparkMax(CANDevices.m_leftLiftMtrId, MotorType.kBrushless);
 
-    RelativeEncoder m_leftliftEnc = m_leftLiftMtr.getEncoder();
-    RelativeEncoder m_rightliftEnc = m_rightLiftMtr.getEncoder();
+    RelativeEncoder m_leftliftEnc = m_liftMtr.getEncoder();
+
+    private final PIDController liftController = new PIDController(0, 0, 0);
 
     double masterPose = m_leftliftEnc.getPosition();
-    double slavePose = m_rightliftEnc.getPosition();
 
     private boolean islvl4Called = false;
     private boolean islvl3Called = false;
@@ -40,54 +39,15 @@ public class LiftSys extends SubsystemBase {
     //private final SlewRateLimiter limit;
 
     public LiftSys() {
-
-    
-        SparkMaxConfig rightConfig = new SparkMaxConfig();
         SparkMaxConfig leftConfig = new SparkMaxConfig();
 
-        //limit = new SlewRateLimiter(2);
-
         m_leftliftEnc.setPosition(0);
-        m_rightliftEnc.setPosition(0);
 
         leftConfig.idleMode(IdleMode.kBrake);
-        leftConfig.closedLoop.pid(0,0,0);
-        //leftConfig.encoder.inverted(true);
-
-        rightConfig.idleMode(IdleMode.kBrake);
-        rightConfig.closedLoop.pid(0,0.00025,0);
         
-
-        m_leftLiftMtr.configure(leftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        m_rightLiftMtr.configure(rightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
-        //m_leftLiftMtr.configureAsync(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        //m_rightLiftMtr.configureAsync(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
-        
+        m_liftMtr.configure(leftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     }
-
-    public boolean islvl4Called() {
-        return islvl4Called = true;
-    }
-
-    public boolean islvl3Called() {
-        return islvl3Called = true;
-    }
-
-    public boolean islvl2Called() {
-        return islvl2Called = true;
-    }
-
-    public boolean islvl1Called() {
-        return islvl1Called = true;
-    }
-
-    public boolean islvl0Called() {
-        return islvl0Called = true;
-    }
-        
 
     public void lvl4() {
         islvl4Called = true;
@@ -109,139 +69,35 @@ public class LiftSys extends SubsystemBase {
         islvl0Called = true;
     }
         
-    double rightLiftSpeed = 0.3325;
-    double leftLiftSpeed = -0.32;
+    private double lvl0Pose = 0;
+    private double lvl1Pose = -9;
+    private double lvl2Pose = -10;
+    private double lvl3Pose = -15;
+    private double lvl4Pose = -25;
 
     @Override
     public void periodic() {
-
-        double masterPose = m_leftliftEnc.getPosition();
-
-        if (-masterPose > m_rightliftEnc.getPosition()){
-            //m_rightLiftMtr.set(limit.calculate(0.325));
-            m_rightLiftMtr.set(rightLiftSpeed);
-        }
-        else if (-masterPose < m_rightliftEnc.getPosition()){
-            m_rightLiftMtr.set(0);
-        }
-        else if (islvl0Called == true && (m_rightliftEnc.getPosition() > 0.3) && islvl1Called) {
-            m_rightLiftMtr.set(-0.001);
-        }
         
-        
-
         if (DriverStation.isEnabled() == true) {
-
-        System.out.println("Left lift encoder: " + m_leftliftEnc.getPosition());
-        //System.out.println("Right lift encoder: " + m_rightliftEnc.getPosition());
-        
-        
-        if (islvl4Called && m_leftliftEnc.getPosition() < -25) {
-            m_leftLiftMtr.set(-0.05);
-            m_rightLiftMtr.set(0.05);
-            islvl4Called = false;
-            islvl0Called = true;
-        }
-        else if (islvl4Called == true && (m_leftliftEnc.getPosition() > -25)) {
-            m_leftLiftMtr.set(leftLiftSpeed);
-            islvl4Called = false;
-            islvl0Called = true;
-            System.out.println("At level 4");
-        }
-        else if (islvl3Called && m_leftliftEnc.getPosition() < -15) {
-            m_leftLiftMtr.set(-0.05);
-            m_rightLiftMtr.set(0.05);
-            islvl3Called = false;
-            islvl0Called = true;
-        }
-        else if (islvl3Called == true && (m_leftliftEnc.getPosition() > -15)) {
-            m_leftLiftMtr.set(leftLiftSpeed);
-            islvl3Called = false;
-            islvl0Called = true;
-            System.out.println("At level 3");
-        }
-        else if (islvl2Called && m_leftliftEnc.getPosition() < -10) {
-            m_leftLiftMtr.set(-0.05);
-            m_rightLiftMtr.set(0.05);
-            islvl2Called = false;
-            islvl0Called = true;
-        }
-        else if (islvl2Called == true && (m_leftliftEnc.getPosition() > -10)) {
-            m_leftLiftMtr.set(leftLiftSpeed);
-            System.out.println("At level 2");
-            islvl2Called = false;
-            islvl0Called = true;
-        }
-        else if (islvl1Called == true && m_leftliftEnc.getPosition() < -9) {
-            m_leftLiftMtr.set(-0.05);
-            m_rightLiftMtr.set(0.05);
-            islvl1Called = false;
-            islvl0Called = true;
-        }
-        else if (islvl1Called == true && (m_leftliftEnc.getPosition() > -9)) {
-            //m_leftLiftMtr.set(limit.calculate(-0.3));
-            m_leftLiftMtr.set(leftLiftSpeed);
-            System.out.println("At level 1");
-            islvl1Called = false;
-            islvl0Called = true;
-        }
-        /*else if (islvl0Called == true && (m_leftliftEnc.getPosition() < -0.3) && islvl1Called) {
-            m_leftLiftMtr.set(0.001);
-            System.out.println("LOWERING IN PROGRESS");    
-        }*/
-        else if (islvl0Called == true && (m_leftliftEnc.getPosition() < -0.1)) {
-            m_leftLiftMtr.set(0.05);
-            m_rightLiftMtr.set(-0.05);
-            System.out.println("LOWERING IN PROGRESS");;
-        }
-        /*else if (islvl0Called == true) {
-            m_leftLiftMtr.set(0);
-            m_rightLiftMtr.set(0);
-            System.out.println("At level 0");
-        }*/
-        else {
-            m_leftLiftMtr.set(0);
-            m_rightLiftMtr.set(0);
-        }
-        /*if (islvl1Called == true) {
-            if (m_leftliftEnc.getPosition() > m_rightliftEnc.getPosition()){
-                m_rightLiftMtr.set(-0.2);
+            if(islvl4Called == true) {
+                m_liftMtr.set(liftController.calculate(lvl4Pose, m_leftliftEnc.getPosition()));
+                islvl4Called = false;
             }
-            if (m_leftliftEnc.getPosition() < m_rightliftEnc.getPosition()){
-                m_rightLiftMtr.set(0.2);
+            else if(islvl3Called == true) {
+                m_liftMtr.set(liftController.calculate(lvl3Pose, m_leftliftEnc.getPosition()));
+                islvl3Called = false;
             }
-        } 
-        else if (islvl2Called == true) {
-            if (m_leftliftEnc.getPosition() > m_rightliftEnc.getPosition()){
-                m_rightLiftMtr.set(-0.2);
+            else if(islvl2Called == true) {
+                m_liftMtr.set(liftController.calculate(lvl2Pose, m_leftliftEnc.getPosition()));
+                islvl2Called = false;
             }
-            else if (m_leftliftEnc.getPosition() < m_rightliftEnc.getPosition()){
-                m_rightLiftMtr.set(0.2);
+            else if(islvl1Called == true) {
+                m_liftMtr.set(liftController.calculate(lvl1Pose, m_leftliftEnc.getPosition()));
+                islvl1Called = false;
             }
-        }
-        else if (islvl3Called == true) {
-            if (m_leftliftEnc.getPosition() > m_rightliftEnc.getPosition()){
-                m_rightLiftMtr.set(-0.2);
+            else {
+                m_liftMtr.set(liftController.calculate(lvl0Pose, m_leftliftEnc.getPosition()));
             }
-            else if (m_leftliftEnc.getPosition() < m_rightliftEnc.getPosition()){
-                m_rightLiftMtr.set(0.2);
-            }
-        } 
-        else if (islvl4Called == true) {
-            if (m_leftliftEnc.getPosition() > m_rightliftEnc.getPosition()){
-                m_rightLiftMtr.set(-0.2);
-            }
-            else if (m_leftliftEnc.getPosition() < m_rightliftEnc.getPosition()){
-                m_rightLiftMtr.set(0.2);
-            }
-        else {
-            islvl0Called = true;
-            islvl1Called = false;
-            islvl2Called = false;
-            islvl3Called = false;
-            islvl4Called = false;
-        }
-        } */
     }
     } 
 

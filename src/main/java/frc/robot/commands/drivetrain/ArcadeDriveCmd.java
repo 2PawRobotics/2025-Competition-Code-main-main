@@ -2,6 +2,8 @@ package frc.robot.commands.drivetrain;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.SwerveSys;
@@ -75,19 +77,29 @@ public class ArcadeDriveCmd extends Command {
             double theta = Math.atan2(drive, strafe);
             double r = Math.pow(Math.hypot(drive, strafe), 2.0);
 
-            // Red Alliance positive. Blue Alliance negative.
-            drive = -r * Math.sin(theta);
-            strafe = -r * Math.cos(theta);
+            drive = r * Math.sin(theta);
+            strafe = r * Math.cos(theta);
 
             rot = Math.copySign(Math.pow(rot, 2.0), rot);
         }
-
-        swerveSys.drive(
+            // Red Alliance positive. Blue Alliance negative.
+        if(DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+            swerveSys.drive(
             drive * DriveConstants.maxDriveSpeedMetersPerSec,
             strafe * DriveConstants.maxDriveSpeedMetersPerSec,
             -rot * DriveConstants.maxTurnSpeedRadPerSec,
             isFieldRelative
         );
+        }
+        else {
+            swerveSys.drive(
+                -drive * DriveConstants.maxDriveSpeedMetersPerSec,
+                -strafe * DriveConstants.maxDriveSpeedMetersPerSec,
+                -rot * DriveConstants.maxTurnSpeedRadPerSec,
+                isFieldRelative
+            );
+        }
+
     }
     
     // Called once the command ends or is interrupted.

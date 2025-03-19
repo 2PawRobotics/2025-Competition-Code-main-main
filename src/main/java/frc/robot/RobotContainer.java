@@ -27,11 +27,11 @@ import frc.robot.commands.drivetrain.LintakeinCmd;
 import frc.robot.commands.drivetrain.LintakeoutCmd;
 import frc.robot.commands.drivetrain.LintakeoutrunCmd;
 import frc.robot.commands.drivetrain.LockCmd;
-import frc.robot.commands.drivetrain.Lvl0Cmd;
+/*import frc.robot.commands.drivetrain.Lvl0Cmd;
 import frc.robot.commands.drivetrain.Lvl1Cmd;
 import frc.robot.commands.drivetrain.Lvl2Cmd;
 import frc.robot.commands.drivetrain.Lvl3Cmd;
-import frc.robot.commands.drivetrain.Lvl4Cmd;
+import frc.robot.commands.drivetrain.Lvl4Cmd;*/
 import frc.robot.commands.drivetrain.ReleaseCoralCmd;
 import frc.robot.commands.drivetrain.RintakeinCmd;
 import frc.robot.commands.drivetrain.RintakeoutCmd;
@@ -40,14 +40,14 @@ import frc.robot.commands.drivetrain.TurnToHeadingCmd;
 import frc.robot.subsystems.ConveyorSys;
 import frc.robot.subsystems.EndEffectorSys;
 import frc.robot.subsystems.IntakeSys;
-import frc.robot.subsystems.LiftSys;
+//import frc.robot.subsystems.LiftSys;
 import frc.robot.subsystems.SwerveSys;
 
 public class RobotContainer {
     
     // Initialize subsystems.
     private final SwerveSys swerveSys = new SwerveSys();
-    private final LiftSys liftSys = new LiftSys();
+    //private final LiftSys liftSys = new LiftSys();
     private final EndEffectorSys endEffectorSys = new EndEffectorSys();
     private final ConveyorSys conveyorSys = new ConveyorSys();
     private final IntakeSys intakeSys = new IntakeSys();
@@ -59,11 +59,11 @@ public class RobotContainer {
     
 
     //Name Commands
-    private final Lvl0Cmd lvl0Cmd;
-    private final Lvl1Cmd lvl1Cmd;
+    //private final Lvl0Cmd lvl0Cmd;
+    /*private final Lvl1Cmd lvl1Cmd;
     private final Lvl2Cmd lvl2Cmd;
     private final Lvl3Cmd lvl3Cmd;
-    private final Lvl4Cmd lvl4Cmd;
+    private final Lvl4Cmd lvl4Cmd;*/
     private final ReleaseCoralCmd releaseCoralCmd;
     private final ConveyorCmd conveyorCmd;
     private final LintakeoutCmd lintakeoutCmd;
@@ -91,11 +91,11 @@ public class RobotContainer {
         SmartDashboard.putData("auto selector", autoSelector);
 
         //Initalize Commands
-        lvl0Cmd = new Lvl0Cmd(liftSys);
+        /*lvl0Cmd = new Lvl0Cmd(liftSys);
         lvl1Cmd = new Lvl1Cmd(liftSys);
         lvl2Cmd = new Lvl2Cmd(liftSys);
         lvl3Cmd = new Lvl3Cmd(liftSys);
-        lvl4Cmd = new Lvl4Cmd(liftSys);
+        lvl4Cmd = new Lvl4Cmd(liftSys);*/
         releaseCoralCmd = new ReleaseCoralCmd(endEffectorSys);
         conveyorCmd = new ConveyorCmd(conveyorSys);
         lintakeoutCmd = new LintakeoutCmd(intakeSys);
@@ -106,11 +106,11 @@ public class RobotContainer {
         algeaoutrunbwdCmd = new AlgeaoutrunbwdCmd(intakeSys);
 
         //Add Requirements
-        lvl0Cmd.addRequirements(liftSys);
+        /*lvl0Cmd.addRequirements(liftSys);
         lvl1Cmd.addRequirements(liftSys);
         lvl2Cmd.addRequirements(liftSys);
         lvl3Cmd.addRequirements(liftSys);
-        lvl4Cmd.addRequirements(liftSys);
+        lvl4Cmd.addRequirements(liftSys);*/
         releaseCoralCmd.addRequirements(endEffectorSys);
         conveyorCmd.addRequirements(conveyorSys);
         lintakeoutCmd.addRequirements(intakeSys);
@@ -121,11 +121,11 @@ public class RobotContainer {
         algeaoutrunbwdCmd.addRequirements(intakeSys);
             
         //Register Commands to PathPlanner
-        NamedCommands.registerCommand("lvl4", new Lvl4Cmd(liftSys));
+        /*NamedCommands.registerCommand("lvl4", new Lvl4Cmd(liftSys));
         NamedCommands.registerCommand("lvl3", new Lvl3Cmd(liftSys));
         NamedCommands.registerCommand("lvl2", new Lvl2Cmd(liftSys));
         NamedCommands.registerCommand("lvl1", new Lvl1Cmd(liftSys));
-        NamedCommands.registerCommand("lvl0", new Lvl0Cmd(liftSys));
+        NamedCommands.registerCommand("lvl0", new Lvl0Cmd(liftSys));*/
         NamedCommands.registerCommand("releaseCoral", new ReleaseCoralCmd(endEffectorSys));
         NamedCommands.registerCommand("conveyor", new ConveyorCmd(conveyorSys));
         NamedCommands.registerCommand("Lintakeout", new LintakeoutCmd(intakeSys));
@@ -150,10 +150,10 @@ public class RobotContainer {
         JoystickButton releaseCoral = new JoystickButton(ButtonPanel,  ButtonPanelConstants.releaseCoralPort);
         JoystickButton conveyorRun = new JoystickButton(ButtonPanel, ButtonPanelConstants.conveyorRunPort);
 
-        lvl4ReefRight.whileTrue(new Lvl4Cmd(liftSys));
+        /*lvl4ReefRight.whileTrue(new Lvl4Cmd(liftSys));
         lvl3ReefRight.whileTrue(new Lvl3Cmd(liftSys));
         lvl2ReefRight.whileTrue(new Lvl2Cmd(liftSys));
-        lvl1ReefRight.whileTrue(new Lvl1Cmd(liftSys));
+        lvl1ReefRight.whileTrue(new Lvl1Cmd(liftSys));*/
         releaseCoral.whileTrue(new ReleaseCoralCmd(endEffectorSys));
         conveyorRun.whileTrue(new ConveyorCmd(conveyorSys));
 
