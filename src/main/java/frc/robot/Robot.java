@@ -10,10 +10,12 @@ public class Robot extends TimedRobot {
     
     private RobotContainer robotContainer;
     private Command autonomousCommand;
+    private UsbCamera camera;
 
 
     @Override
     public void robotInit() {
+
 
         robotContainer = new RobotContainer();
     }

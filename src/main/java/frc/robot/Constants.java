@@ -61,14 +61,10 @@ public class Constants {
         public static final int m_leftIntakeMtrId = 14;
 
         //Lift
-        public static final int m_rightLiftMtrId = 22;
-        public static final int m_leftLiftMtrId = 21;
-
-        //Conveyor
-        public static final int m_conveyorMtrId = 20;
+        public static final int m_liftMtrId = 21;
 
         //EndEffector
-        public static final int m_coralReleaseSevCnl = 9;
+        public static final int m_ejectionMtrId = 22;
        
     }
 

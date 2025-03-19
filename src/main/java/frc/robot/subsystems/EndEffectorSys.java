@@ -1,18 +1,32 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
+
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANDevices;
+import com.revrobotics.ColorSensorV3;
 
 public class EndEffectorSys extends SubsystemBase {
     
-    public static Servo m_Servo = new Servo(CANDevices.m_coralReleaseSevCnl);
+    public static SparkMax ejectionMtr = new SparkMax(CANDevices.m_ejectionMtrId, MotorType.kBrushed);
+    
+    //public static ColorSensorV3 ToFSensor = new ColorSensorV3(I2C.Port.kOnboard);
+    private DigitalInput photoSensor = new DigitalInput(3);
 
-    private boolean releaseCoral = false;
+    private boolean coralInSystem = false;
 
-    public boolean releaseCoral() {
-        return releaseCoral = true;
+    private boolean ejectCoral = false;
+
+    //photoSensor = false;
+
+    public boolean ejectCoral() {
+        return ejectCoral = true;
     }
 
     public EndEffectorSys() {
@@ -22,19 +36,18 @@ public class EndEffectorSys extends SubsystemBase {
     @Override
     public void periodic() {
         if(DriverStation.isEnabled() == true){
-        if(
-            releaseCoral == true
-        ) {
-            m_Servo.set(0);
-            releaseCoral = false;
-            System.out.println("Out");
-        }
 
-        else if(
-            releaseCoral == false
-        ) {
-            m_Servo.set(0.5);
-        }
+            if (!photoSensor.get() == true){
+                System.out.println("Object Detected");
+            }
+            else {
+                System.out.println("No Object");
+            }
+
+
+            if (coralInSystem == true) {
+                ejectionMtr.set(0.3);
+            }
     }
     }
 }

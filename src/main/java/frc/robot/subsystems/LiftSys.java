@@ -22,11 +22,11 @@ import frc.robot.Constants.LiftConstants;
 
 public class LiftSys extends SubsystemBase {
     
-    public static SparkMax m_liftMtr = new SparkMax(CANDevices.m_leftLiftMtrId, MotorType.kBrushless);
+    public static SparkMax m_liftMtr = new SparkMax(CANDevices.m_liftMtrId, MotorType.kBrushless);
 
     RelativeEncoder m_leftliftEnc = m_liftMtr.getEncoder();
 
-    private final PIDController liftController = new PIDController(0, 0, 0);
+    private final PIDController liftController = new PIDController(0.4, 0, 0);
 
     double masterPose = m_leftliftEnc.getPosition();
 
@@ -77,26 +77,26 @@ public class LiftSys extends SubsystemBase {
 
     @Override
     public void periodic() {
-        
+        //System.out.println(m_leftliftEnc.getPosition());
         if (DriverStation.isEnabled() == true) {
             if(islvl4Called == true) {
-                m_liftMtr.set(liftController.calculate(lvl4Pose, m_leftliftEnc.getPosition()));
+                m_liftMtr.set(liftController.calculate(m_leftliftEnc.getPosition(), lvl4Pose));
                 islvl4Called = false;
             }
             else if(islvl3Called == true) {
-                m_liftMtr.set(liftController.calculate(lvl3Pose, m_leftliftEnc.getPosition()));
+                m_liftMtr.set(liftController.calculate(m_leftliftEnc.getPosition(), lvl3Pose));
                 islvl3Called = false;
             }
             else if(islvl2Called == true) {
-                m_liftMtr.set(liftController.calculate(lvl2Pose, m_leftliftEnc.getPosition()));
+                m_liftMtr.set(liftController.calculate(m_leftliftEnc.getPosition(), lvl2Pose));
                 islvl2Called = false;
             }
             else if(islvl1Called == true) {
-                m_liftMtr.set(liftController.calculate(lvl1Pose, m_leftliftEnc.getPosition()));
+                m_liftMtr.set(liftController.calculate(m_leftliftEnc.getPosition(), lvl1Pose));
                 islvl1Called = false;
             }
             else {
-                m_liftMtr.set(liftController.calculate(lvl0Pose, m_leftliftEnc.getPosition()));
+                m_liftMtr.set(liftController.calculate(m_leftliftEnc.getPosition(), lvl0Pose));
             }
     }
     } 
