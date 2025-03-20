@@ -14,7 +14,7 @@ import com.revrobotics.ColorSensorV3;
 
 public class EndEffectorSys extends SubsystemBase {
     
-    public static SparkMax ejectionMtr = new SparkMax(CANDevices.m_ejectionMtrId, MotorType.kBrushed);
+    public static SparkMax ejectionMtr = new SparkMax(CANDevices.ejectionMtrId, MotorType.kBrushed);
     
     //public static ColorSensorV3 ToFSensor = new ColorSensorV3(I2C.Port.kOnboard);
     private DigitalInput photoSensor = new DigitalInput(3);
@@ -39,14 +39,19 @@ public class EndEffectorSys extends SubsystemBase {
 
             if (!photoSensor.get() == true){
                 System.out.println("Object Detected");
+                coralInSystem = true;
             }
             else {
+                coralInSystem = false;
                 System.out.println("No Object");
             }
 
 
             if (coralInSystem == true) {
                 ejectionMtr.set(0.3);
+            }
+            else {
+                ejectionMtr.set(0);
             }
     }
     }
