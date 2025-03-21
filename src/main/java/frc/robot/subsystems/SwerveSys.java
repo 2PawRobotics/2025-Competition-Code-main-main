@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import java.util.Optional;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
@@ -21,8 +22,24 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.RobotContainer;
+import frc.robot.Constants.ButtonPanelConstants;
 import frc.robot.Constants.CANDevices;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.commands.drivetrain.AlgeaoutrunCmd;
+import frc.robot.commands.drivetrain.AlgeaoutrunbwdCmd;
+import frc.robot.commands.drivetrain.LintakeinCmd;
+import frc.robot.commands.drivetrain.LintakeoutCmd;
+import frc.robot.commands.drivetrain.LintakeoutrunCmd;
+import frc.robot.commands.drivetrain.Lvl0Cmd;
+import frc.robot.commands.drivetrain.Lvl1Cmd;
+import frc.robot.commands.drivetrain.Lvl2Cmd;
+import frc.robot.commands.drivetrain.Lvl3Cmd;
+import frc.robot.commands.drivetrain.Lvl4Cmd;
+import frc.robot.commands.drivetrain.ReleaseCoralCmd;
+import frc.robot.commands.drivetrain.RintakeinCmd;
+import frc.robot.commands.drivetrain.RintakeoutCmd;
+import frc.robot.commands.drivetrain.RintakeoutrunCmd;
 /*import frc.robot.Constants.VisionConstants;*/
 import frc.robot.util.limelight.LimelightPoseEstimator;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -127,7 +144,7 @@ public class SwerveSys extends SubsystemBase {
         setPose(pose);
     }
 
-
+  
     /**
      * Constructs a new SwerveSys.
      * 
@@ -146,6 +163,27 @@ public class SwerveSys extends SubsystemBase {
         System.out.println(frontRightMod.getSteerEncAngle());
         System.out.println(backLeftMod.getSteerEncAngle());
         System.out.println(backRightMod.getSteerEncAngle());*/
+
+      /*   //Initalize Commands
+        lvl0Cmd = new Lvl0Cmd(liftSys);
+        lvl1Cmd = new Lvl1Cmd(liftSys);
+        lvl2Cmd = new Lvl2Cmd(liftSys);
+        lvl3Cmd = new Lvl3Cmd(liftSys);
+        lvl4Cmd = new Lvl4Cmd(liftSys);
+        
+        //Add Requirements
+        lvl0Cmd.addRequirements(liftSys);
+        lvl1Cmd.addRequirements(liftSys);
+        lvl2Cmd.addRequirements(liftSys);
+        lvl3Cmd.addRequirements(liftSys);
+        lvl4Cmd.addRequirements(liftSys);
+        
+        //Register Commands to PathPlanner
+        NamedCommands.registerCommand("lvl4", new Lvl4Cmd(liftSys));
+        NamedCommands.registerCommand("lvl3", new Lvl3Cmd(liftSys));
+        NamedCommands.registerCommand("lvl2", new Lvl2Cmd(liftSys));
+        NamedCommands.registerCommand("lvl1", new Lvl1Cmd(liftSys));
+        NamedCommands.registerCommand("lvl0", new Lvl0Cmd(liftSys));*/
 
         //Gets the robotics configuration from Path Planner
     try{
@@ -186,6 +224,15 @@ public class SwerveSys extends SubsystemBase {
     public void periodic() {
         // Updates the odometry every 20ms
         poseEstimator.update(imu.getRotation2d(), getModulePositions());
+
+        if(RobotContainer.driverController.rightBumper().getAsBoolean() == true || 
+        RobotContainer.ButtonPanel.getRawButton(ButtonPanelConstants.lvl3ReefRightPort) == true || 
+        RobotContainer.ButtonPanel.getRawButton(ButtonPanelConstants.lvl4ReefRightPort) == true){
+            setSpeedFactor(0.25);
+        }
+        else {
+            setSpeedFactor(1);
+        }
 
         /*for(LimelightPoseEstimator limelightPoseEstimator : limelightPoseEstimators) {
             Optional<Pose2d> limelightPose = limelightPoseEstimator.getRobotPose();

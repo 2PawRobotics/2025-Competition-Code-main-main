@@ -80,18 +80,8 @@ public class RobotContainer {
 
     public RobotContainer() {
         RobotController.setBrownoutVoltage(DriveConstants.brownoutVoltage);
-
-        //camera = new UsbCamera("driver camera", 2);
         
         CameraServer.startAutomaticCapture();
-        
-
-
-
-        // Build an auto chooser. This will use Commands.none() as the default option.
-        autoSelector = AutoBuilder.buildAutoChooser();
-
-        SmartDashboard.putData("auto selector", autoSelector);
 
         //Initalize Commands
         lvl0Cmd = new Lvl0Cmd(liftSys);
@@ -138,6 +128,10 @@ public class RobotContainer {
         NamedCommands.registerCommand("Rintakein", new RintakeinCmd(intakeSys));
         NamedCommands.registerCommand("Lintakein", new LintakeinCmd(intakeSys));
 
+        // Build an auto chooser. This will use Commands.none() as the default option.
+        autoSelector = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData("auto selector", autoSelector);
+        
         configDriverBindings();
         configButtonPanel();
 

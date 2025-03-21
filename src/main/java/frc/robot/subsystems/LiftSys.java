@@ -26,7 +26,7 @@ public class LiftSys extends SubsystemBase {
 
     RelativeEncoder m_leftliftEnc = m_liftMtr.getEncoder();
 
-    private final PIDController liftController = new PIDController(0.4, 0, 0);
+    private final PIDController liftController = new PIDController(0.2, 0, 0);
 
     double masterPose = m_leftliftEnc.getPosition();
 
@@ -78,7 +78,7 @@ public class LiftSys extends SubsystemBase {
     @Override
     public void periodic() {
         //System.out.println(m_leftliftEnc.getPosition());
-        if (DriverStation.isEnabled() == true) {
+        
             if(islvl4Called == true) {
                 m_liftMtr.set(liftController.calculate(m_leftliftEnc.getPosition(), lvl4Pose));
                 islvl4Called = false;
@@ -98,7 +98,7 @@ public class LiftSys extends SubsystemBase {
             else {
                 m_liftMtr.set(liftController.calculate(m_leftliftEnc.getPosition(), lvl0Pose));
             }
-    }
+    
     } 
 
 
