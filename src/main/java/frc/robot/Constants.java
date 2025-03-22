@@ -65,7 +65,7 @@ public class Constants {
 
         //EndEffector
         //public static final int m_tempMotorId = 20;
-        public static final int ejectionMtrId = 22;
+        public static final int ejectionMtrId = 20;
        
     }
 

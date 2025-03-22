@@ -21,15 +21,22 @@ public class EndEffectorSys extends SubsystemBase {
     
     //public static ColorSensorV3 ToFSensor = new ColorSensorV3(I2C.Port.kOnboard);
     private DigitalInput photoSensor = new DigitalInput(3);
+    private DigitalInput photoSensor2 = new DigitalInput(4);
 
-    private boolean coralInSystem = false;
+    private boolean coralDetected = false;
 
     private boolean ejectCoral = false;
+
+    private boolean intakeCoral = false;
 
     //photoSensor = false;
 
     public boolean ejectCoral() {
         return ejectCoral = true;
+    }
+
+    public boolean intakeCoral() {
+        return intakeCoral = true;
     }
 
     public EndEffectorSys() {
@@ -40,26 +47,40 @@ public class EndEffectorSys extends SubsystemBase {
     public void periodic() {
         if(DriverStation.isEnabled() == true){
 
-            if (!photoSensor.get() == true){
-                if (!coralInSystem) {
-                    coralInSystem = true;
+            if (!photoSensor2.get() == true){
+
+                coralDetected = true;
+
+                if (!coralDetected) {
+                    coralDetected = true;
                     delay.reset();
                     delay.start();
                 }
-                if (delay.hasElapsed(5)) {
+
+                if (delay.hasElapsed(0)) {
                     System.out.println("Object Detected");
-                    System.out.println("Delay");
+                    //System.out.println("Delay");
                     delay.stop();
                 }
             }
             else {
-                coralInSystem = false;
+                coralDetected = false;
                 System.out.println("No Object");
             }
 
+            if (!photoSensor.get() == true) {
+                intakeCoral = true;
+            }
 
-            if (coralInSystem == true) {
-                ejectionMtr.set(0.3);
+            if (intakeCoral == true && coralDetected == false) {
+                ejectionMtr.set(1);
+            }
+
+            if (ejectCoral == true) {
+                ejectionMtr.set(1);
+            }
+            else if (coralDetected == true && ejectCoral == false) {
+                ejectionMtr.set(0);
             }
             else {
                 ejectionMtr.set(0);
