@@ -74,10 +74,12 @@ public class EndEffectorSys extends SubsystemBase {
 
             if (intakeCoral == true && coralDetected == false) {
                 ejectionMtr.set(1);
+                intakeCoral = false;
             }
 
             if (ejectCoral == true) {
                 ejectionMtr.set(1);
+                ejectCoral = false;
             }
             else if (coralDetected == true && ejectCoral == false) {
                 ejectionMtr.set(0);

@@ -152,7 +152,7 @@ public class RobotContainer {
         lvl2ReefRight.whileTrue(new Lvl2Cmd(liftSys));
         lvl1ReefRight.whileTrue(new Lvl1Cmd(liftSys));
         releaseCoral.whileTrue(new ReleaseCoralCmd(endEffectorSys));
-        
+
         //conveyorRun.whileTrue(new ConveyorCmd(conveyorSys));
 
     }
@@ -171,11 +171,7 @@ public class RobotContainer {
         //Swerve locking system
         driverController.axisGreaterThan(XboxController.Axis.kLeftTrigger.value, ControllerConstants.triggerPressedThreshhold)
            .whileTrue(new LockCmd(swerveSys));
-        
-           driverController.a().whileTrue(new Lvl4Cmd(liftSys));
-           driverController.y().whileTrue(new Lvl3Cmd(liftSys));
-           driverController.x().whileTrue(new Lvl2Cmd(liftSys));
-           driverController.b().whileTrue(new Lvl1Cmd(liftSys));
+    
 
         // Add this line to print CANCoder values when pressing back button
         driverController.back().onTrue(Commands.runOnce(() -> swerveSys.printCanCoderAbsolutePositions()));

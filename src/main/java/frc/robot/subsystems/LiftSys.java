@@ -24,11 +24,11 @@ public class LiftSys extends SubsystemBase {
     
     public static SparkMax m_liftMtr = new SparkMax(CANDevices.m_liftMtrId, MotorType.kBrushless);
 
-    RelativeEncoder m_leftliftEnc = m_liftMtr.getEncoder();
+    RelativeEncoder m_liftEnc = m_liftMtr.getEncoder();
 
-    private final PIDController liftController = new PIDController(0.2, 0, 0);
+    private final PIDController liftController = new PIDController(0.1, 0, 0);
 
-    double masterPose = m_leftliftEnc.getPosition();
+    double masterPose = m_liftEnc.getPosition();
 
     private boolean islvl4Called = false;
     private boolean islvl3Called = false;
@@ -39,13 +39,13 @@ public class LiftSys extends SubsystemBase {
     //private final SlewRateLimiter limit;
 
     public LiftSys() {
-        SparkMaxConfig leftConfig = new SparkMaxConfig();
+        SparkMaxConfig Config = new SparkMaxConfig();
 
-        m_leftliftEnc.setPosition(0);
+        m_liftEnc.setPosition(0);
 
-        leftConfig.idleMode(IdleMode.kBrake);
+        Config.idleMode(IdleMode.kBrake);
         
-        m_liftMtr.configure(leftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        m_liftMtr.configure(Config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     }
 
@@ -70,33 +70,33 @@ public class LiftSys extends SubsystemBase {
     }
         
     private double lvl0Pose = 0;
-    private double lvl1Pose = -9;
-    private double lvl2Pose = -10;
-    private double lvl3Pose = -15;
-    private double lvl4Pose = -25;
+    private double lvl1Pose = 9;
+    private double lvl2Pose = 10;
+    private double lvl3Pose = 15;
+    private double lvl4Pose = 25;
 
     @Override
     public void periodic() {
-        //System.out.println(m_leftliftEnc.getPosition());
+        //System.out.println(m_liftEnc.getPosition());
         
             if(islvl4Called == true) {
-                m_liftMtr.set(liftController.calculate(m_leftliftEnc.getPosition(), lvl4Pose));
+                m_liftMtr.set(liftController.calculate(m_liftEnc.getPosition(), lvl4Pose));
                 islvl4Called = false;
             }
             else if(islvl3Called == true) {
-                m_liftMtr.set(liftController.calculate(m_leftliftEnc.getPosition(), lvl3Pose));
+                m_liftMtr.set(liftController.calculate(m_liftEnc.getPosition(), lvl3Pose));
                 islvl3Called = false;
             }
             else if(islvl2Called == true) {
-                m_liftMtr.set(liftController.calculate(m_leftliftEnc.getPosition(), lvl2Pose));
+                m_liftMtr.set(liftController.calculate(m_liftEnc.getPosition(), lvl2Pose));
                 islvl2Called = false;
             }
             else if(islvl1Called == true) {
-                m_liftMtr.set(liftController.calculate(m_leftliftEnc.getPosition(), lvl1Pose));
+                m_liftMtr.set(liftController.calculate(m_liftEnc.getPosition(), lvl1Pose));
                 islvl1Called = false;
             }
             else {
-                m_liftMtr.set(liftController.calculate(m_leftliftEnc.getPosition(), lvl0Pose));
+                m_liftMtr.set(liftController.calculate(m_liftEnc.getPosition(), lvl0Pose));
             }
     
     } 
