@@ -9,7 +9,10 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
+import frc.robot.Constants.ButtonPanelConstants;
 import frc.robot.Constants.CANDevices;
 import com.revrobotics.ColorSensorV3;
 
@@ -49,7 +52,7 @@ public class EndEffectorSys extends SubsystemBase {
 
             if (!photoSensor2.get() == true){
 
-                coralDetected = true;
+                //coralDetected = true;
 
                 if (!coralDetected) {
                     coralDetected = true;
@@ -72,9 +75,18 @@ public class EndEffectorSys extends SubsystemBase {
                 intakeCoral = true;
             }
 
-            if (intakeCoral == true && coralDetected == false) {
-                ejectionMtr.set(1);
+            if (!photoSensor.get() == true && coralDetected == false) {
+                ejectionMtr.set(0.3);
                 intakeCoral = false;
+            }
+
+            if(RobotContainer.ButtonPanel.getRawButton(ButtonPanelConstants.conveyorRunPort) == true){
+                ejectionMtr.set(0.3);
+                //System.out.println("Intaling Algea");
+            }
+            else    {
+                ejectionMtr.set(0);
+                //System.out.println("Stoping Algea");
             }
 
             if (ejectCoral == true) {

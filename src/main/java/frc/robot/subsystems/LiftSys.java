@@ -26,7 +26,7 @@ public class LiftSys extends SubsystemBase {
 
     RelativeEncoder m_liftEnc = m_liftMtr.getEncoder();
 
-    private final PIDController liftController = new PIDController(0.1, 0, 0);
+    private final PIDController liftController = new PIDController(0.0125, 0.04, 0);
 
     double masterPose = m_liftEnc.getPosition();
 
@@ -70,14 +70,14 @@ public class LiftSys extends SubsystemBase {
     }
         
     private double lvl0Pose = 0;
-    private double lvl1Pose = 9;
-    private double lvl2Pose = 10;
-    private double lvl3Pose = 15;
-    private double lvl4Pose = 25;
+    private double lvl1Pose = 45;
+    private double lvl2Pose = 50;
+    private double lvl3Pose = 75;
+    private double lvl4Pose = 125;
 
     @Override
     public void periodic() {
-        //System.out.println(m_liftEnc.getPosition());
+        System.out.println(m_liftEnc.getPosition());
         
             if(islvl4Called == true) {
                 m_liftMtr.set(liftController.calculate(m_liftEnc.getPosition(), lvl4Pose));
