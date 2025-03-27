@@ -50,47 +50,36 @@ public class EndEffectorSys extends SubsystemBase {
     public void periodic() {
         if(DriverStation.isEnabled() == true){
 
-            if (!photoSensor2.get() == true){
+            if (!photoSensor2.get() == true && !photoSensor.get() == true) {
 
+                //intakeCoral = false;
+                ejectionMtr.set(0);
+                System.out.println("Coral Detected");
                 //coralDetected = true;
-
-                if (!coralDetected) {
-                    coralDetected = true;
-                    delay.reset();
-                    delay.start();
-                }
-
-                if (delay.hasElapsed(0)) {
-                    System.out.println("Object Detected");
-                    //System.out.println("Delay");
-                    delay.stop();
-                }
+            }
+            else if (!photoSensor.get() == true && !photoSensor2.get() == false) {
+                ejectionMtr.set(-0.3);
+                System.out.println("running");
             }
             else {
-                coralDetected = false;
-                System.out.println("No Object");
-            }
-
-            if (!photoSensor.get() == true) {
-                intakeCoral = true;
-            }
-
-            if (!photoSensor.get() == true && coralDetected == false) {
-                ejectionMtr.set(0.3);
-                intakeCoral = false;
+                ejectionMtr.set(0);
+                System.out.println("not running");
             }
 
             if(RobotContainer.ButtonPanel.getRawButton(ButtonPanelConstants.conveyorRunPort) == true){
                 ejectionMtr.set(0.3);
                 //System.out.println("Intaling Algea");
             }
+            else if (RobotContainer.ButtonPanel.getRawButton(ButtonPanelConstants.releaseCoralPort) == true){
+                ejectionMtr.set(-0.3);
+            }
             else    {
                 ejectionMtr.set(0);
                 //System.out.println("Stoping Algea");
             }
 
-            if (ejectCoral == true) {
-                ejectionMtr.set(1);
+            /*if (ejectCoral == true) {
+                ejectionMtr.set(0.3);
                 ejectCoral = false;
             }
             else if (coralDetected == true && ejectCoral == false) {
@@ -98,7 +87,7 @@ public class EndEffectorSys extends SubsystemBase {
             }
             else {
                 ejectionMtr.set(0);
-            }
+            }*/
         }
     }
 }

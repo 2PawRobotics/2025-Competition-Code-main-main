@@ -41,7 +41,7 @@ public class LightsDefaultCmd extends Command {
 			lightsSys.setColor(LightsConstants.hasNoteColor);
 		}
 		else if(DriverStation.getAlliance().isPresent() && prevHasNote && !hasNoteSupplier.getAsBoolean()) {*/
-			if(DriverStation.getAlliance().get() == Alliance.Red) {
+			/*if(DriverStation.getAlliance().get() == Alliance.Red) {
 				lightsSys.setColor(LightsConstants.redAllianceColor);
 			}
 			else if(DriverStation.getAlliance().get() == Alliance.Blue) {
@@ -49,10 +49,10 @@ public class LightsDefaultCmd extends Command {
 			}
 			else {
 				lightsSys.setColor(LightsConstants.noAllianceColor);
-			}
+			}&*/
 		// }
 
-		lightsSys.setValue(1.0);
+		//lightsSys.setValue(1.0);
 
 		// prevHasNote = hasNoteSupplier.getAsBoolean();
 	}
