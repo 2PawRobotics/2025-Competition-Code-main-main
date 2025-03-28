@@ -9,6 +9,30 @@
           "data": {
             "pathName": "New Path"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "lvl2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "releaseCoral"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "lvl0"
+          }
         }
       ]
     }

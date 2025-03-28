@@ -64,6 +64,10 @@ public class LiftSys extends SubsystemBase {
         islvl2Called = true;
     }
 
+    public void lvl2Finish(){
+        islvl2Called = false;
+    }
+
     public void lvl1() {
         islvl1Called = true;
     }
@@ -72,11 +76,11 @@ public class LiftSys extends SubsystemBase {
         islvl0Called = true;
     }
         
-    private double lvl0Pose = 0.25; //1
-    private double lvl1Pose = 40; //40
-    private double lvl2Pose = 50; //50
-    private double lvl3Pose = 76; //
-    private double lvl4Pose = 117; //
+    private double lvl0Pose = 0.1; //1
+    private double lvl1Pose = 35; //40
+    private double lvl2Pose = 43.75; //50
+    private double lvl3Pose = 66.5; //
+    private double lvl4Pose = 102.375; //
 
     @Override
     public void periodic() {
@@ -108,6 +112,10 @@ public class LiftSys extends SubsystemBase {
             if (RobotContainer.ButtonPanel.getRawButton(ButtonPanelConstants.lvl1ReefLeftPort) == true) {
                 m_liftMtr.set(0);
             }
+            else if (RobotContainer.ButtonPanel.getRawButton(ButtonPanelConstants.lvl2ReefLeftPort)) {
+                m_liftMtr.set(-0.325);
+                islvl0Called = true;
+            }
             else if (lvl4Pose < m_liftEnc.getPosition() && islvl4Called == true){
                 m_liftMtr.set(0.005);
             }
@@ -133,19 +141,20 @@ public class LiftSys extends SubsystemBase {
                 m_liftMtr.set(0.005);
             }
             else if (lvl1Pose > m_liftEnc.getPosition() && islvl1Called == true) {
-                m_liftMtr.set(0.25);
+                m_liftMtr.set(0.7);
                 islvl1Called = false;
             }
             else if (lvl0Pose > m_liftEnc.getPosition() && islvl0Called == true) {
                 m_liftMtr.set(0);
-                islvl0Called = true;
+                islvl0Called = false; //Changed to false 3/27/25 6:22PM
             }
             else if (lvl0Pose < m_liftEnc.getPosition()) {
-                m_liftMtr.set(-0.25);
+                m_liftMtr.set(-0.325);
                 islvl0Called = true;
             }
             else {
                 m_liftMtr.set(0);
+                System.out.println("hello world");
             }
     
     } 

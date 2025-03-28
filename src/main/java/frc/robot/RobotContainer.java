@@ -86,7 +86,7 @@ public class RobotContainer {
         //Initalize Commands
         lvl0Cmd = new Lvl0Cmd(liftSys);
         lvl1Cmd = new Lvl1Cmd(liftSys);
-        lvl2Cmd = new Lvl2Cmd(liftSys);
+        lvl2Cmd = new Lvl2Cmd(liftSys, endEffectorSys);
         lvl3Cmd = new Lvl3Cmd(liftSys);
         lvl4Cmd = new Lvl4Cmd(liftSys);
         releaseCoralCmd = new ReleaseCoralCmd(endEffectorSys);
@@ -116,7 +116,7 @@ public class RobotContainer {
         //Register Commands to PathPlanner
         NamedCommands.registerCommand("lvl4", new Lvl4Cmd(liftSys));
         NamedCommands.registerCommand("lvl3", new Lvl3Cmd(liftSys));
-        NamedCommands.registerCommand("lvl2", new Lvl2Cmd(liftSys));
+        NamedCommands.registerCommand("lvl2", new Lvl2Cmd(liftSys, endEffectorSys));
         NamedCommands.registerCommand("lvl1", new Lvl1Cmd(liftSys));
         NamedCommands.registerCommand("lvl0", new Lvl0Cmd(liftSys));
         NamedCommands.registerCommand("releaseCoral", new ReleaseCoralCmd(endEffectorSys));
@@ -149,7 +149,7 @@ public class RobotContainer {
 
         lvl4ReefRight.whileTrue(new Lvl4Cmd(liftSys));
         lvl3ReefRight.whileTrue(new Lvl3Cmd(liftSys));
-        lvl2ReefRight.whileTrue(new Lvl2Cmd(liftSys));
+        lvl2ReefRight.whileTrue(new Lvl2Cmd(liftSys, endEffectorSys));
         lvl1ReefRight.whileTrue(new Lvl1Cmd(liftSys));
         releaseCoral.whileTrue(new ReleaseCoralCmd(endEffectorSys));
 
