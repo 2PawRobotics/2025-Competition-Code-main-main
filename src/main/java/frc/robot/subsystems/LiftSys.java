@@ -23,13 +23,13 @@ import frc.robot.Constants.LiftConstants;
 public class LiftSys extends SubsystemBase {
     
     public static SparkMax m_leftLiftMtr = new SparkMax(CANDevices.m_leftLiftMtrId, MotorType.kBrushless);
-    public static SparkMax m_rightLiftMtr = new SparkMax(CANDevices.m_rightLiftMtrId, MotorType.kBrushless);
+    //public static SparkMax m_rightLiftMtr = new SparkMax(CANDevices.m_rightLiftMtrId, MotorType.kBrushless);
 
     RelativeEncoder m_leftliftEnc = m_leftLiftMtr.getEncoder();
-    RelativeEncoder m_rightliftEnc = m_rightLiftMtr.getEncoder();
+    //RelativeEncoder m_rightliftEnc = m_rightLiftMtr.getEncoder();
 
     double masterPose = m_leftliftEnc.getPosition();
-    double slavePose = m_rightliftEnc.getPosition();
+    //double slavePose = m_rightliftEnc.getPosition();
 
     private boolean islvl4Called = false;
     private boolean islvl3Called = false;
@@ -48,7 +48,7 @@ public class LiftSys extends SubsystemBase {
         //limit = new SlewRateLimiter(2);
 
         m_leftliftEnc.setPosition(0);
-        m_rightliftEnc.setPosition(0);
+        //m_rightliftEnc.setPosition(0);
 
         leftConfig.idleMode(IdleMode.kBrake);
         leftConfig.closedLoop.pid(0,0,0);
@@ -59,7 +59,7 @@ public class LiftSys extends SubsystemBase {
         
 
         m_leftLiftMtr.configure(leftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        m_rightLiftMtr.configure(rightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        //m_rightLiftMtr.configure(rightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         //m_leftLiftMtr.configureAsync(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         //m_rightLiftMtr.configureAsync(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -115,7 +115,7 @@ public class LiftSys extends SubsystemBase {
     @Override
     public void periodic() {
 
-        double masterPose = m_leftliftEnc.getPosition();
+        /*double masterPose = m_leftliftEnc.getPosition();
 
         if (-masterPose > m_rightliftEnc.getPosition()){
             //m_rightLiftMtr.set(limit.calculate(0.325));
@@ -188,7 +188,7 @@ public class LiftSys extends SubsystemBase {
         /*else if (islvl0Called == true && (m_leftliftEnc.getPosition() < -0.3) && islvl1Called) {
             m_leftLiftMtr.set(0.001);
             System.out.println("LOWERING IN PROGRESS");    
-        }*/
+        }
         else if (islvl0Called == true && (m_leftliftEnc.getPosition() < -0.1)) {
             m_leftLiftMtr.set(0.05);
             m_rightLiftMtr.set(-0.05);
@@ -198,7 +198,7 @@ public class LiftSys extends SubsystemBase {
             m_leftLiftMtr.set(0);
             m_rightLiftMtr.set(0);
             System.out.println("At level 0");
-        }*/
+        }
         else {
             m_leftLiftMtr.set(0);
             m_rightLiftMtr.set(0);
@@ -241,8 +241,8 @@ public class LiftSys extends SubsystemBase {
             islvl3Called = false;
             islvl4Called = false;
         }
-        } */
-    }
+        } 
+    }*/
     } 
 
 
